@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ class ChannelRatingAdapterTest {
     @Test
     fun testGetView() {
         // setup
-        val expectedSize = Strength.values().size
+        val expectedSize = Strength.entries.size
         val expectedStrength = reverse(Strength.FOUR)
         val wiFiChannel = WiFiChannel(1, 2)
         fixture.add(wiFiChannel)
@@ -109,8 +109,8 @@ class ChannelRatingAdapterTest {
         // setup
         val resources = mainActivity.resources
         val expected = (resources.getText(R.string.channel_rating_best_none).toString()
-                + resources.getText(R.string.channel_rating_best_alternative)
-                + " " + resources.getString(WiFiBand.GHZ5.textResource))
+            + resources.getText(R.string.channel_rating_best_alternative)
+            + " " + resources.getString(WiFiBand.GHZ5.textResource))
         val wiFiChannels: List<WiFiChannel> = listOf()
         val channelAPCounts: List<ChannelAPCount> = listOf()
         whenever(channelRating.bestChannels(wiFiChannels)).thenReturn(channelAPCounts)
@@ -168,9 +168,9 @@ class ChannelRatingAdapterTest {
     }
 
     private fun withMaximumChannelAPCounts(): List<ChannelAPCount> =
-            (0..11).map { ChannelAPCount(WiFiChannel(it + 1, it + 100), 0) }
+        (0..11).map { ChannelAPCount(WiFiChannel(it + 1, it + 100), 0) }
 
     private fun withChannelAPCounts(): List<ChannelAPCount> =
-            (0..10).map { ChannelAPCount(WiFiChannel(it + 1, it + 100), 0) }
+        (0..10).map { ChannelAPCount(WiFiChannel(it + 1, it + 100), 0) }
 
 }

@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,10 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class TimeGraphFragmentTest {
+    @Suppress("unused")
     private val mainActivity = RobolectricUtil.INSTANCE.activity
     private val fixture = TimeGraphFragment()
-    private val scanner = MainContextHelper.INSTANCE.scannerService
+    private val scannerService = MainContextHelper.INSTANCE.scannerService
 
     @After
     fun tearDown() {
@@ -49,8 +50,8 @@ class TimeGraphFragmentTest {
         RobolectricUtil.INSTANCE.startFragment(fixture)
         // validate
         assertNotNull(fixture)
-        verify(scanner).update()
-        verify(scanner).register(fixture.timeGraphAdapter)
+        verify(scannerService).update()
+        verify(scannerService).register(fixture.timeGraphAdapter)
     }
 
     @Test
@@ -69,8 +70,8 @@ class TimeGraphFragmentTest {
         // execute
         fixture.onResume()
         // validate
-        verify(scanner, times(2)).update()
-        verify(scanner, times(2)).register(fixture.timeGraphAdapter)
+        verify(scannerService, times(2)).update()
+        verify(scannerService, times(2)).register(fixture.timeGraphAdapter)
     }
 
     @Test
@@ -80,7 +81,7 @@ class TimeGraphFragmentTest {
         // execute
         fixture.onPause()
         // validate
-        verify(scanner).unregister(fixture.timeGraphAdapter)
+        verify(scannerService).unregister(fixture.timeGraphAdapter)
     }
 
     @Config(sdk = [Build.VERSION_CODES.P])

@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@ package com.vrem.wifianalyzer.wifi.channelgraph
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.*
-import com.vrem.util.EMPTY
 import com.vrem.wifianalyzer.RobolectricUtil
 import com.vrem.wifianalyzer.wifi.band.WiFiBand
 import com.vrem.wifianalyzer.wifi.graphutils.GraphDataPoint
@@ -35,8 +34,9 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class DataManagerTest {
-    private val level = -40
+    @Suppress("unused")
     private val mainActivity = RobolectricUtil.INSTANCE.activity
+    private val level = -40
     private val fixture = DataManager()
 
     @Test
@@ -132,10 +132,10 @@ class DataManagerTest {
         assertFalse(wiFiChannelPair.inRange(makeWiFiDetail(frequency = wiFiChannelPair.second.frequency + 1)))
     }
 
-    private fun makeWiFiDetail(SSID: String = "SSID", frequency: Int = 2455): WiFiDetail {
+    private fun makeWiFiDetail(ssid: String = "SSID", frequency: Int = 2455): WiFiDetail {
         val wiFiSignal = WiFiSignal(frequency, frequency, WiFiWidth.MHZ_20, level, true)
-        val wiFiIdentifier = WiFiIdentifier(SSID, "BSSID")
-        return WiFiDetail(wiFiIdentifier, String.EMPTY, wiFiSignal, WiFiAdditional.EMPTY)
+        val wiFiIdentifier = WiFiIdentifier(ssid, "BSSID")
+        return WiFiDetail(wiFiIdentifier, WiFiSecurity.EMPTY, wiFiSignal, WiFiAdditional.EMPTY)
     }
 
     private fun makeWiFiDetails(frequency: Int): List<WiFiDetail> {

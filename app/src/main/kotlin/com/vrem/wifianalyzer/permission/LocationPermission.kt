@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ class LocationPermission(private val activity: Activity) {
             try {
                 val locationManager = activity.getSystemService(LocationManager::class.java)
                 locationEnabled(locationManager) ||
-                        networkProviderEnabled(locationManager) ||
-                        gpsProviderEnabled(locationManager)
+                    networkProviderEnabled(locationManager) ||
+                    gpsProviderEnabled(locationManager)
             } catch (e: Exception) {
                 false
             }

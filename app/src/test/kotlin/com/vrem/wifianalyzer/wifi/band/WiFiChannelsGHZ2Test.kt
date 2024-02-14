@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,9 +18,11 @@
 package com.vrem.wifianalyzer.wifi.band
 
 import com.vrem.util.EMPTY
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
+import java.util.Locale
 
 class WiFiChannelsGHZ2Test {
     private val fixture: WiFiChannelsGHZ2 = WiFiChannelsGHZ2()
@@ -91,18 +93,18 @@ class WiFiChannelsGHZ2Test {
     fun testWiFiChannelPairs() {
         val pair: List<WiFiChannelPair> = fixture.wiFiChannelPairs()
         assertEquals(1, pair.size)
-        validatePair(1, 14, pair[0])
+        validatePair(pair[0])
     }
 
     @Test
     fun testWiFiChannelPair() {
-        validatePair(1, 14, fixture.wiFiChannelPairFirst(Locale.US.country))
-        validatePair(1, 14, fixture.wiFiChannelPairFirst(String.EMPTY))
+        validatePair(fixture.wiFiChannelPairFirst(Locale.US.country))
+        validatePair(fixture.wiFiChannelPairFirst(String.EMPTY))
     }
 
-    private fun validatePair(expectedFirst: Int, expectedSecond: Int, pair: WiFiChannelPair) {
-        assertEquals(expectedFirst, pair.first.channel)
-        assertEquals(expectedSecond, pair.second.channel)
+    private fun validatePair(pair: WiFiChannelPair) {
+        assertEquals(1, pair.first.channel)
+        assertEquals(14, pair.second.channel)
     }
 
     @Test

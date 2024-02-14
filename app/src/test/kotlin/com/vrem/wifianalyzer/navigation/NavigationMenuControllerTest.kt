@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ class NavigationMenuControllerTest {
         // execute
         val menu: Menu = navigationView.menu
         // validate
-        assertEquals(NavigationMenu.values().size, menu.size())
+        assertEquals(NavigationMenu.entries.size, menu.size())
         validateNavigationGroup(menu)
     }
 
@@ -99,16 +99,16 @@ class NavigationMenuControllerTest {
     }
 
     private fun navigationViewMenuItem(navigationMenu: NavigationMenu): MenuItem =
-            navigationView.menu.findItem(navigationMenu.ordinal)
+        navigationView.menu.findItem(navigationMenu.ordinal)
 
     private fun bottomNavigationMenuItem(navigationMenu: NavigationMenu): MenuItem =
-            bottomNavigationView.menu.findItem(navigationMenu.ordinal)
+        bottomNavigationView.menu.findItem(navigationMenu.ordinal)
 
     private fun validateNavigationGroup(menu: Menu): Unit =
-            NavigationGroup.values().forEach { validateNavigationMenu(it, menu) }
+        NavigationGroup.entries.forEach { validateNavigationMenu(it, menu) }
 
     private fun validateNavigationMenu(navigationGroup: NavigationGroup, menu: Menu): Unit =
-            navigationGroup.navigationMenus.forEach { validateMenuItem(menu, it, navigationGroup) }
+        navigationGroup.navigationMenus.forEach { validateMenuItem(menu, it, navigationGroup) }
 
     private fun validateMenuItem(menu: Menu, navigationMenu: NavigationMenu, navigationGroup: NavigationGroup) {
         val actual: MenuItem = menu.getItem(navigationMenu.ordinal)

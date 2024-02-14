@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 package com.vrem.wifianalyzer.wifi.model
 
-import com.vrem.util.EMPTY
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -28,10 +27,11 @@ class WiFiVirtualTest {
     fun testWiFiVirtualWithVirtualBSSID() {
         // setup
         val wiFiDetail = WiFiDetail(
-                WiFiIdentifier("SSID1", "20:cf:30:ce:1d:71"),
-                String.EMPTY,
-                WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
-                WiFiAdditional.EMPTY)
+            WiFiIdentifier("SSID1", "20:cf:30:ce:1d:71"),
+            WiFiSecurity.EMPTY,
+            WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
+            WiFiAdditional.EMPTY
+        )
         // execute
         val actual = wiFiDetail.wiFiVirtual
         // validate
@@ -44,10 +44,11 @@ class WiFiVirtualTest {
     fun testWiFiVirtualWithRegularBSSIDWhenBSSIDShort() {
         // setup
         val wiFiDetail = WiFiDetail(
-                WiFiIdentifier("SSID1", "20:cf:30:ce:1d:7"),
-                String.EMPTY,
-                WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
-                WiFiAdditional.EMPTY)
+            WiFiIdentifier("SSID1", "20:cf:30:ce:1d:7"),
+            WiFiSecurity.EMPTY,
+            WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
+            WiFiAdditional.EMPTY
+        )
         // execute
         val actual = wiFiDetail.wiFiVirtual
         // validate
@@ -60,10 +61,11 @@ class WiFiVirtualTest {
     fun testWiFiVirtualWithRegularBSSIDWhenBSSIDLong() {
         // setup
         val wiFiDetail = WiFiDetail(
-                WiFiIdentifier("SSID1", "20:cf:30:ce:1d:71:"),
-                String.EMPTY,
-                WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
-                WiFiAdditional.EMPTY)
+            WiFiIdentifier("SSID1", "20:cf:30:ce:1d:71:"),
+            WiFiSecurity.EMPTY,
+            WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
+            WiFiAdditional.EMPTY
+        )
         // execute
         val actual = wiFiDetail.wiFiVirtual
         // validate

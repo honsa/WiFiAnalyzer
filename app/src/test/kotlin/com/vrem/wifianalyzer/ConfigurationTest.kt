@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +22,11 @@ import com.vrem.wifianalyzer.wifi.band.WiFiBand
 import com.vrem.wifianalyzer.wifi.band.WiFiChannel
 import com.vrem.wifianalyzer.wifi.band.WiFiChannelPair
 import com.vrem.wifianalyzer.wifi.band.WiFiChannels
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
+import java.util.Locale
 
 class ConfigurationTest {
     private val fixture = Configuration(true)
@@ -52,7 +54,7 @@ class ConfigurationTest {
     @Test
     fun testWiFiChannelPairWithInit() {
         // execute & validate
-        WiFiBand.values().forEach {
+        WiFiBand.entries.forEach {
             assertEquals(WiFiChannels.UNKNOWN, fixture.wiFiChannelPair(it))
         }
     }
@@ -62,7 +64,7 @@ class ConfigurationTest {
         // execute
         fixture.wiFiChannelPair(Locale.US.country)
         // validate
-        WiFiBand.values().forEach {
+        WiFiBand.entries.forEach {
             assertEquals(it.wiFiChannels.wiFiChannelPairFirst(Locale.US.country), fixture.wiFiChannelPair(it))
         }
     }

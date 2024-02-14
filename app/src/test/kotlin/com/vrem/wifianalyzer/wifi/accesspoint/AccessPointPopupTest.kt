@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -104,9 +104,10 @@ class AccessPointPopupTest {
     }
 
     private fun withWiFiDetail(): WiFiDetail =
-            WiFiDetail(
-                    WiFiIdentifier("SSID", "BSSID"),
-                    "capabilities",
-                    WiFiSignal(1, 1, WiFiWidth.MHZ_40, 2, true),
-                    WiFiAdditional.EMPTY)
+        WiFiDetail(
+            WiFiIdentifier("SSID", "BSSID"),
+            WiFiSecurity("capabilities"),
+            WiFiSignal(1, 1, WiFiWidth.MHZ_40, 2, true),
+            WiFiAdditional.EMPTY
+        )
 }

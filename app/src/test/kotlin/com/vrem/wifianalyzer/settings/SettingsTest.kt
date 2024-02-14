@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,7 @@ package com.vrem.wifianalyzer.settings
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import com.vrem.util.defaultCountryCode
 import com.vrem.util.defaultLanguageTag
 import com.vrem.util.ordinals
@@ -257,7 +251,7 @@ class SettingsTest {
         // setup
         val expected = WiFiBand.GHZ5
         val values = setOf("" + expected.ordinal)
-        val defaultValues = ordinals(WiFiBand.values())
+        val defaultValues = ordinals(WiFiBand.entries)
         doReturn(values).whenever(repository).stringSet(R.string.filter_wifi_band_key, defaultValues)
         // execute
         val actual = fixture.findWiFiBands()
@@ -284,7 +278,7 @@ class SettingsTest {
         // setup
         val expected = Strength.THREE
         val values = setOf("" + expected.ordinal)
-        val defaultValues = ordinals(Strength.values())
+        val defaultValues = ordinals(Strength.entries)
         doReturn(values).whenever(repository).stringSet(R.string.filter_strength_key, defaultValues)
         // execute
         val actual = fixture.findStrengths()
@@ -311,7 +305,7 @@ class SettingsTest {
         // setup
         val expected = Security.WPA
         val values = setOf("" + expected.ordinal)
-        val defaultValues = ordinals(Security.values())
+        val defaultValues = ordinals(Security.entries)
         doReturn(values).whenever(repository).stringSet(R.string.filter_security_key, defaultValues)
         // execute
         val actual = fixture.findSecurities()

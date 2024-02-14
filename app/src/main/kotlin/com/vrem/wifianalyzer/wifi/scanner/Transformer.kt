@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,21 @@ package com.vrem.wifianalyzer.wifi.scanner
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import com.vrem.annotation.OpenClass
-import com.vrem.util.EMPTY
 import com.vrem.util.buildMinVersionR
+import com.vrem.util.buildMinVersionT
+import com.vrem.util.nullToEmpty
 import com.vrem.util.ssid
-import com.vrem.wifianalyzer.wifi.model.*
+import com.vrem.wifianalyzer.wifi.model.WiFiConnection
+import com.vrem.wifianalyzer.wifi.model.WiFiData
+import com.vrem.wifianalyzer.wifi.model.WiFiDetail
+import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
+import com.vrem.wifianalyzer.wifi.model.WiFiSecurity
+import com.vrem.wifianalyzer.wifi.model.WiFiSignal
+import com.vrem.wifianalyzer.wifi.model.WiFiStandard
+import com.vrem.wifianalyzer.wifi.model.WiFiStandardId
+import com.vrem.wifianalyzer.wifi.model.WiFiWidth
+import com.vrem.wifianalyzer.wifi.model.convertIpV4Address
+import com.vrem.wifianalyzer.wifi.model.convertSSID
 
 @Suppress("DEPRECATION")
 fun WifiInfo.ipV4Address(): Int = ipAddress
@@ -36,8 +47,8 @@ internal class Transformer(private val cache: Cache) {
         return if (wifiInfo == null || wifiInfo.networkId == -1) {
             WiFiConnection.EMPTY
         } else {
-            val ssid = convertSSID(wifiInfo.ssid ?: String.EMPTY)
-            val wiFiIdentifier = WiFiIdentifier(ssid, wifiInfo.bssid ?: String.EMPTY)
+            val ssid = convertSSID(String.nullToEmpty(wifiInfo.ssid))
+            val wiFiIdentifier = WiFiIdentifier(ssid, String.nullToEmpty(wifiInfo.bssid))
             WiFiConnection(wiFiIdentifier, convertIpV4Address(wifiInfo.ipV4Address()), wifiInfo.linkSpeed)
         }
     }
@@ -55,7 +66,15 @@ internal class Transformer(private val cache: Cache) {
             WiFiStandard.UNKNOWN.wiFiStandardId
         }
 
+    internal fun securityTypes(scanResult: ScanResult): List<Int> =
+        if (minVersionT()) {
+            scanResult.securityTypes.asList()
+        } else {
+            listOf()
+        }
+
     internal fun minVersionR(): Boolean = buildMinVersionR()
+    internal fun minVersionT(): Boolean = buildMinVersionT()
 
     private fun transform(cacheResult: CacheResult): WiFiDetail {
         val scanResult = cacheResult.scanResult
@@ -69,13 +88,13 @@ internal class Transformer(private val cache: Cache) {
         )
         val wiFiIdentifier = WiFiIdentifier(
             scanResult.ssid(),
-            if (scanResult.BSSID == null) String.EMPTY else scanResult.BSSID
+            String.nullToEmpty(scanResult.BSSID)
         )
-        return WiFiDetail(
-            wiFiIdentifier,
-            if (scanResult.capabilities == null) String.EMPTY else scanResult.capabilities,
-            wiFiSignal
+        val wiFiSecurity = WiFiSecurity(
+            String.nullToEmpty(scanResult.capabilities),
+            securityTypes(scanResult)
         )
+        return WiFiDetail(wiFiIdentifier, wiFiSecurity, wiFiSignal)
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -94,9 +94,9 @@ class GraphColorsTest {
 
     private fun withGraphColors(): Array<GraphColor> {
         return arrayOf(
-                GraphColor(0xFB1554, 0x33FB1554),
-                GraphColor(0x74FF89, 0x3374FF89),
-                GraphColor(0x8B1EFC, 0x338B1EFC)
+            GraphColor(0xFB1554, 0x33FB1554),
+            GraphColor(0x74FF89, 0x3374FF89),
+            GraphColor(0x8B1EFC, 0x338B1EFC)
         )
     }
 }

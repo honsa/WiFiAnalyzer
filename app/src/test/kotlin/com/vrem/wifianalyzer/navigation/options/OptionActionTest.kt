@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,7 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class OptionActionTest {
+    @Suppress("unused")
     private val mainActivity: MainActivity = RobolectricUtil.INSTANCE.activity
     private val scannerService: ScannerService = INSTANCE.scannerService
     private val settings: Settings = INSTANCE.settings
@@ -89,7 +90,7 @@ class OptionActionTest {
 
     @Test
     fun testOptionAction() {
-        assertEquals(6, OptionAction.values().size)
+        assertEquals(6, OptionAction.entries.size)
     }
 
     @Test

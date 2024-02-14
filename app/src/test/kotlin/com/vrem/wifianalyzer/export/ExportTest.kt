@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,15 @@ import com.vrem.wifianalyzer.MainActivity
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail
 import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
+import com.vrem.wifianalyzer.wifi.model.WiFiSecurity
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal
 import com.vrem.wifianalyzer.wifi.model.WiFiWidth
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class ExportTest {
     private val name = "name"
@@ -113,19 +115,20 @@ class ExportTest {
 
     private fun data(timestamp: String): String =
         "Time Stamp|SSID|BSSID|Strength|Primary Channel|Primary Frequency|Center Channel|Center Frequency|Width (Range)|Distance|Timestamp|802.11mc|Security\n" +
-                timestamp + "|SSID10|BSSID10|-10dBm|3|2422MHz|5|2432MHz|40MHz (2412 - 2452)|~0.0m|0|true|capabilities10\n" +
-                timestamp + "|SSID20|BSSID20|-20dBm|5|2432MHz|7|2442MHz|40MHz (2422 - 2462)|~0.1m|0|true|capabilities20\n" +
-                timestamp + "|SSID30|BSSID30|-30dBm|7|2442MHz|9|2452MHz|40MHz (2432 - 2472)|~0.3m|0|true|capabilities30\n"
+            timestamp + "|SSID10|BSSID10|-10dBm|3|2422MHz|5|2432MHz|40MHz (2412 - 2452)|~0.0m|0|true|capabilities10\n" +
+            timestamp + "|SSID20|BSSID20|-20dBm|5|2432MHz|7|2442MHz|40MHz (2422 - 2462)|~0.1m|0|true|capabilities20\n" +
+            timestamp + "|SSID30|BSSID30|-30dBm|7|2442MHz|9|2452MHz|40MHz (2432 - 2472)|~0.3m|0|true|capabilities30\n"
 
     private fun timestamp(date: Date): String = SimpleDateFormat("yyyy/MM/dd-HH:mm:ss", Locale.US).format(date)
 
     private fun withWiFiDetails(): List<WiFiDetail> =
-            listOf(withWiFiDetail(10), withWiFiDetail(20), withWiFiDetail(30))
+        listOf(withWiFiDetail(10), withWiFiDetail(20), withWiFiDetail(30))
 
     private fun withWiFiDetail(offset: Int): WiFiDetail {
         val wiFiSignal = WiFiSignal(2412 + offset, 2422 + offset, WiFiWidth.MHZ_40, -offset, true)
         val wiFiIdentifier = WiFiIdentifier("SSID$offset", "BSSID$offset")
-        return WiFiDetail(wiFiIdentifier, "capabilities$offset", wiFiSignal)
+        val wiFiSecurity = WiFiSecurity("capabilities$offset")
+        return WiFiDetail(wiFiIdentifier, wiFiSecurity, wiFiSignal)
     }
 
 }

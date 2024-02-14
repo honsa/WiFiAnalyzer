@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class TimeGraphAdapterTest {
         // execute
         val graphViewNotifiers = fixture.graphViewNotifiers()
         // validate
-        assertEquals(WiFiBand.values().size, graphViewNotifiers.size)
+        assertEquals(WiFiBand.entries.size, graphViewNotifiers.size)
     }
 
     @Test
@@ -49,6 +49,6 @@ class TimeGraphAdapterTest {
         // execute
         val graphViews = fixture.graphViews()
         // validate
-        assertEquals(WiFiBand.values().size, graphViews.size)
+        assertEquals(WiFiBand.entries.size, graphViews.size)
     }
 }

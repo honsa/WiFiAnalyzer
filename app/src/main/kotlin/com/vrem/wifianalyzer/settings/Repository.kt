@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ class Repository(private val context: Context) {
     fun initializeDefaultValues(): Unit = defaultValues(context, R.xml.settings, false)
 
     fun registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener: OnSharedPreferenceChangeListener): Unit =
-            sharedPreferences().registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
+        sharedPreferences().registerOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener)
 
     fun save(key: Int, value: Int): Unit = save(key, value.toString())
 

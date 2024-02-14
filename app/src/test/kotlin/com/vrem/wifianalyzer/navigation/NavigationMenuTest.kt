@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.robolectric.annotation.Config
 class NavigationMenuTest {
     @Test
     fun testNavigationMenu() {
-        assertEquals(10, NavigationMenu.values().size)
+        assertEquals(10, NavigationMenu.entries.size)
     }
 
     @Test

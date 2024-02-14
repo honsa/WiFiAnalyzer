@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +20,30 @@ package com.vrem.wifianalyzer.navigation
 import android.view.MenuItem
 import com.vrem.wifianalyzer.MainActivity
 import com.vrem.wifianalyzer.R
-import com.vrem.wifianalyzer.navigation.availability.*
-import com.vrem.wifianalyzer.navigation.items.*
+import com.vrem.wifianalyzer.navigation.availability.NavigationOption
+import com.vrem.wifianalyzer.navigation.availability.navigationOptionAp
+import com.vrem.wifianalyzer.navigation.availability.navigationOptionOff
+import com.vrem.wifianalyzer.navigation.availability.navigationOptionOther
+import com.vrem.wifianalyzer.navigation.availability.navigationOptionRating
+import com.vrem.wifianalyzer.navigation.availability.navigationOptionWiFiSwitchOn
+import com.vrem.wifianalyzer.navigation.items.NavigationItem
+import com.vrem.wifianalyzer.navigation.items.navigationItemAbout
+import com.vrem.wifianalyzer.navigation.items.navigationItemAccessPoints
+import com.vrem.wifianalyzer.navigation.items.navigationItemChannelAvailable
+import com.vrem.wifianalyzer.navigation.items.navigationItemChannelGraph
+import com.vrem.wifianalyzer.navigation.items.navigationItemChannelRating
+import com.vrem.wifianalyzer.navigation.items.navigationItemExport
+import com.vrem.wifianalyzer.navigation.items.navigationItemPortAuthority
+import com.vrem.wifianalyzer.navigation.items.navigationItemSettings
+import com.vrem.wifianalyzer.navigation.items.navigationItemTimeGraph
+import com.vrem.wifianalyzer.navigation.items.navigationItemVendors
 
-enum class NavigationMenu(val icon: Int,
-                          val title: Int,
-                          val navigationItem: NavigationItem,
-                          val navigationOptions: List<NavigationOption> = navigationOptionOff) {
+enum class NavigationMenu(
+    val icon: Int,
+    val title: Int,
+    val navigationItem: NavigationItem,
+    val navigationOptions: List<NavigationOption> = navigationOptionOff
+) {
     ACCESS_POINTS(R.drawable.ic_network_wifi, R.string.action_access_points, navigationItemAccessPoints, navigationOptionAp),
     CHANNEL_RATING(R.drawable.ic_wifi_tethering, R.string.action_channel_rating, navigationItemChannelRating, navigationOptionRating),
     CHANNEL_GRAPH(R.drawable.ic_insert_chart, R.string.action_channel_graph, navigationItemChannelGraph, navigationOptionOther),
@@ -39,7 +56,7 @@ enum class NavigationMenu(val icon: Int,
     ABOUT(R.drawable.ic_info_outline, R.string.action_about, navigationItemAbout);
 
     fun activateNavigationMenu(mainActivity: MainActivity, menuItem: MenuItem): Unit =
-            navigationItem.activate(mainActivity, menuItem, this)
+        navigationItem.activate(mainActivity, menuItem, this)
 
     fun activateOptions(mainActivity: MainActivity): Unit = navigationOptions.forEach { it(mainActivity) }
 

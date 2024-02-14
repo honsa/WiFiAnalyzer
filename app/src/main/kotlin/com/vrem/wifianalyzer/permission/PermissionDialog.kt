@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import com.vrem.wifianalyzer.R
 @OpenClass
 class PermissionDialog(private val activity: Activity) {
 
-    fun show() {
+    fun show(): View? {
         val view = activity.layoutInflater.inflate(R.layout.info_permission, null)
         val visibility = if (buildMinVersionP()) View.VISIBLE else View.GONE
         view.findViewById<View>(R.id.throttling)?.visibility = visibility
@@ -40,6 +40,7 @@ class PermissionDialog(private val activity: Activity) {
             .setNegativeButton(android.R.string.cancel, CancelClick(activity))
             .create()
             .show()
+        return view
     }
 
     internal class OkClick(private val activity: Activity) : DialogInterface.OnClickListener {

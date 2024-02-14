@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,10 @@ import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.atLeastOnce
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.*
 import com.vrem.util.packageInfo
 import com.vrem.util.readFile
-import com.vrem.wifianalyzer.MainContextHelper.INSTANCE
+import com.vrem.wifianalyzer.MainContextHelper
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.RobolectricUtil
 import org.junit.After
@@ -44,21 +42,29 @@ import java.util.*
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class AboutFragmentTest {
+    @Suppress("unused")
     private val mainActivity = RobolectricUtil.INSTANCE.activity
-    private val configuration = INSTANCE.configuration
+    private val configuration = MainContextHelper.INSTANCE.configuration
+    private val wiFiManagerWrapper = MainContextHelper.INSTANCE.wiFiManagerWrapper
     private val fixture = AboutFragment()
 
     @Before
     fun setUp() {
-        whenever(configuration.sizeAvailable).thenReturn(true)
-        whenever(configuration.largeScreen).thenReturn(true)
+        doReturn(false).whenever(wiFiManagerWrapper).isScanThrottleEnabled()
+        doReturn(false).whenever(wiFiManagerWrapper).is5GHzBandSupported()
+        doReturn(false).whenever(wiFiManagerWrapper).is6GHzBandSupported()
+        doReturn(true).whenever(configuration).sizeAvailable
+        doReturn(true).whenever(configuration).largeScreen
         RobolectricUtil.INSTANCE.startFragment(fixture)
         RobolectricUtil.INSTANCE.clearLooper()
     }
 
     @After
     fun tearDown() {
-        INSTANCE.restore()
+        MainContextHelper.INSTANCE.restore()
+        verify(wiFiManagerWrapper).isScanThrottleEnabled()
+        verify(wiFiManagerWrapper).is5GHzBandSupported()
+        verify(wiFiManagerWrapper).is6GHzBandSupported()
         verify(configuration, atLeastOnce()).sizeAvailable
         verify(configuration).largeScreen
     }
@@ -122,10 +128,15 @@ class AboutFragmentTest {
     }
 
     @Test
-    fun testWiFi() {
+    fun testDeviceInformation() {
+        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_on).visibility)
+        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_off).visibility)
+
         assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_2ghz_success).visibility)
+
         assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_success).visibility)
         assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_fails).visibility)
+
         assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_success).visibility)
         assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_fails).visibility)
     }

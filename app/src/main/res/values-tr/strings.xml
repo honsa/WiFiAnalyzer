@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ WiFiAnalyzer
-  ~ Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+  ~ Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -127,4 +127,9 @@
     <string name="filter_strength_title">"Sinyal Gücü"</string>
     <string name="filter_security_title">"Güvenlik"</string>
     <!-- filter end -->
+
+    <!-- wifi throttling start -->
+    <string name="wifi_throttling_on">Wi-Fi tarama kısıtlaması etkin</string>
+    <string name="wifi_throttling_off">Wi-Fi tarama kısıtlaması devre dışı</string>
+    <!-- wifi throttling end -->
 </resources>

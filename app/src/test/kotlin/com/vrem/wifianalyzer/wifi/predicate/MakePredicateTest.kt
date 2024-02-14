@@ -1,6 +1,6 @@
 /*
  * WiFiAnalyzer
- * Copyright (C) 2015 - 2023 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
+ * Copyright (C) 2015 - 2024 VREM Software Development <VREMSoftwareDevelopment@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,10 @@ import com.vrem.wifianalyzer.wifi.model.WiFiDetail
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+private enum class TestObject {
+    VALUE1, VALUE3, VALUE2
+}
+
 class MakePredicateTest {
 
     @Test
@@ -28,9 +32,9 @@ class MakePredicateTest {
         // setup
         val wiFiDetail = WiFiDetail.EMPTY
         val toPredicate: ToPredicate<TestObject> = { truePredicate }
-        val filters: Set<TestObject> = TestObject.values().toSet()
+        val filters: Set<TestObject> = TestObject.entries.toSet()
         // execute
-        val actual: Predicate = makePredicate(TestObject.values(), filters, toPredicate)
+        val actual: Predicate = makePredicate(TestObject.entries, filters, toPredicate)
         // validate
         assertTrue(actual(wiFiDetail))
     }
@@ -42,7 +46,7 @@ class MakePredicateTest {
         val toPredicate: ToPredicate<TestObject> = { truePredicate }
         val filters: Set<TestObject> = setOf(TestObject.VALUE1, TestObject.VALUE3)
         // execute
-        val actual: Predicate = makePredicate(TestObject.values(), filters, toPredicate)
+        val actual: Predicate = makePredicate(TestObject.entries, filters, toPredicate)
         // validate
         assertTrue(actual(wiFiDetail))
     }
