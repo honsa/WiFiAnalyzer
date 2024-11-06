@@ -17,18 +17,15 @@
  */
 package com.vrem.wifianalyzer.wifi.filter.adapter
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.settings.Settings
 import com.vrem.wifianalyzer.wifi.model.Security
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class SecurityAdapterTest {
     private val settings: Settings = mock()
@@ -40,85 +37,85 @@ class SecurityAdapterTest {
     }
 
     @Test
-    fun testIsActive() {
-        assertFalse(fixture.isActive())
+    fun isActive() {
+        assertThat(fixture.isActive()).isFalse()
     }
 
     @Test
-    fun testIsActiveWithChanges() {
+    fun isActiveWithChanges() {
         // setup
         fixture.toggle(Security.WPA)
         // execute & validate
-        assertTrue(fixture.isActive())
+        assertThat(fixture.isActive()).isTrue()
     }
 
     @Test
-    fun testGetValues() {
+    fun getValues() {
         // setup
         val expected = Security.entries
         // execute
         val actual = fixture.selections
         // validate
-        assertTrue(actual.containsAll(expected.toList()))
+        assertThat(actual).containsAll(expected)
     }
 
     @Test
-    fun testGetValuesDefault() {
+    fun getValuesDefault() {
         // setup
         val expected = Security.entries
         // execute
         val actual = fixture.defaults
         // validate
-        assertArrayEquals(expected.toTypedArray(), actual.toTypedArray())
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testToggleRemoves() {
+    fun toggleRemoves() {
         // execute
         val actual = fixture.toggle(Security.WEP)
         // validate
-        assertTrue(actual)
-        assertFalse(fixture.contains(Security.WEP))
+        assertThat(actual).isTrue()
+        assertThat(fixture.contains(Security.WEP)).isFalse()
     }
 
     @Test
-    fun testToggleAdds() {
+    fun toggleAdds() {
         // setup
         fixture.toggle(Security.WPA)
         // execute
         val actual = fixture.toggle(Security.WPA)
         // validate
-        assertTrue(actual)
-        assertTrue(fixture.contains(Security.WPA))
+        assertThat(actual).isTrue()
+        assertThat(fixture.contains(Security.WPA)).isTrue()
     }
 
     @Test
-    fun testRemovingAllWillNotRemoveLast() {
+    fun removingAllWillNotRemoveLast() {
         // setup
         val values: Set<Security> = Security.entries.toSet()
         // execute
         values.forEach { fixture.toggle(it) }
         // validate
         values.forEach { fixture.contains(it) }
-        assertTrue(fixture.contains(values.last()))
+        assertThat(fixture.contains(values.last())).isTrue()
     }
 
     @Test
-    fun testGetColorWithExisting() {
+    fun getColorWithExisting() {
         // execute & validate
-        assertEquals(R.color.selected, fixture.color(Security.WPA))
+        assertThat(fixture.color(Security.WPA)).isEqualTo(R.color.selected)
     }
 
     @Test
-    fun testGetColorWithNonExisting() {
+    fun getColorWithNonExisting() {
         // setup
         fixture.toggle(Security.WPA)
         // execute & validate
-        assertEquals(R.color.regular, fixture.color(Security.WPA))
+        assertThat(fixture.color(Security.WPA)).isEqualTo(R.color.regular)
     }
 
     @Test
-    fun testSave() {
+    fun save() {
         // setup
         val expected = fixture.selections
         // execute

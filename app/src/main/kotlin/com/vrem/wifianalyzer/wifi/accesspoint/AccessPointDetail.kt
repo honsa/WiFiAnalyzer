@@ -24,22 +24,15 @@ import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import com.vrem.annotation.OpenClass
-import com.vrem.util.EMPTY
 import com.vrem.wifianalyzer.MainContext
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.wifi.model.WiFiAdditional
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail
 import com.vrem.wifianalyzer.wifi.model.WiFiSecurity
 import com.vrem.wifianalyzer.wifi.model.WiFiSignal
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 @OpenClass
 class AccessPointDetail {
-    private val vendorShortMax = 12
-    private val vendorLongMax = 30
 
     fun makeView(
         convertView: View?,
@@ -66,7 +59,7 @@ class AccessPointDetail {
         setViewWiFiBand(view, wiFiDetail.wiFiSignal)
         setView80211mc(view, wiFiDetail.wiFiSignal)
         setViewWiFiStandard(view, wiFiDetail.wiFiSignal)
-        setTimestamp(view, wiFiDetail.wiFiSignal)
+        setViewFastRoaming(view, wiFiDetail.wiFiSignal)
         enableTextSelection(view)
         return view
     }
@@ -112,9 +105,8 @@ class AccessPointDetail {
         }
 
     private fun setWiFiStandardImage(view: View, wiFiSignal: WiFiSignal) =
-        view.findViewById<ImageView>(R.id.wiFiStandardImage)?.let {
-            it.tag = wiFiSignal.wiFiStandard.imageResource
-            it.setImageResource(wiFiSignal.wiFiStandard.imageResource)
+        view.findViewById<TextView>(R.id.wiFiStandardValue)?.let {
+            it.text = ContextCompat.getString(view.context, wiFiSignal.extra.wiFiStandard.valueResource)
         }
 
     private fun setLevelText(view: View, wiFiSignal: WiFiSignal) =
@@ -137,7 +129,7 @@ class AccessPointDetail {
                 it.visibility = View.GONE
             } else {
                 it.visibility = View.VISIBLE
-                it.text = wiFiAdditional.vendorName.take(vendorShortMax)
+                it.text = wiFiAdditional.vendorName
             }
         }
 
@@ -148,11 +140,7 @@ class AccessPointDetail {
 
     private fun setViewSecurityTypes(view: View, wiFiSecurity: WiFiSecurity) =
         view.findViewById<TextView>(R.id.securityTypes)?.let {
-            it.text = wiFiSecurity.wiFiSecurityTypes
-                .map { securityType -> view.context.getString(securityType.textResource) }
-                .filter { text -> text.isNotBlank() }
-                .toList()
-                .joinToString(" ", "[", "]")
+            it.text = wiFiSecurity.wiFiSecurityTypesDisplay(view.context)
         }
 
     private fun setViewVendorLong(view: View, wiFiAdditional: WiFiAdditional) =
@@ -161,38 +149,24 @@ class AccessPointDetail {
                 it.visibility = View.GONE
             } else {
                 it.visibility = View.VISIBLE
-                it.text = wiFiAdditional.vendorName.take(vendorLongMax)
+                it.text = wiFiAdditional.vendorName
             }
         }
 
     private fun setViewWiFiBand(view: View, wiFiSignal: WiFiSignal) =
         view.findViewById<TextView>(R.id.wiFiBand)?.setText(wiFiSignal.wiFiBand.textResource)
 
+    private fun setViewFastRoaming(view: View, wiFiSignal: WiFiSignal) =
+        view.findViewById<TextView>(R.id.fastRoaming)?.let {
+            it.text = wiFiSignal.extra.fastRoamingDisplay(view.context)
+        }
+
     private fun setViewWiFiStandard(view: View, wiFiSignal: WiFiSignal) =
-        view.findViewById<TextView>(R.id.wiFiStandard)
-            ?.setText(wiFiSignal.wiFiStandard.textResource)
+        view.findViewById<TextView>(R.id.wiFiStandardFull)?.setText(wiFiSignal.extra.wiFiStandard.fullResource)
 
     private fun setView80211mc(view: View, wiFiSignal: WiFiSignal) =
         view.findViewById<TextView>(R.id.flag80211mc)?.let {
-            it.visibility = if (wiFiSignal.is80211mc) View.VISIBLE else View.GONE
+            it.visibility = if (wiFiSignal.extra.is80211mc) View.VISIBLE else View.GONE
         }
-
-    private fun setTimestamp(view: View, wiFiSignal: WiFiSignal) =
-        view.findViewById<TextView>(R.id.timestamp)?.let {
-            val milliseconds: Long = wiFiSignal.timestamp / 1000
-            if (0L == milliseconds) {
-                it.text = String.EMPTY
-                it.visibility = View.GONE
-            } else {
-                val simpleDateFormat = SimpleDateFormat(TIME_STAMP_FORMAT, Locale.US)
-                simpleDateFormat.timeZone = TimeZone.getTimeZone("GMT")
-                it.text = simpleDateFormat.format(Date(milliseconds))
-                it.visibility = View.VISIBLE
-            }
-        }
-
-    companion object {
-        private const val TIME_STAMP_FORMAT = "H:mm:ss.SSS"
-    }
 
 }

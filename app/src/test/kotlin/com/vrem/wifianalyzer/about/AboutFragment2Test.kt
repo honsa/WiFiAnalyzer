@@ -21,20 +21,21 @@ import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.*
 import com.vrem.wifianalyzer.MainContextHelper
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.RobolectricUtil
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
-import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class AboutFragment2Test {
     @Suppress("unused")
     private val mainActivity = RobolectricUtil.INSTANCE.activity
@@ -59,17 +60,17 @@ class AboutFragment2Test {
     }
 
     @Test
-    fun testDeviceInformation() {
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_on).visibility)
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_off).visibility)
+    fun deviceInformation() {
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_on).visibility).isEqualTo(View.VISIBLE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_off).visibility).isEqualTo(View.GONE)
 
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_2ghz_success).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_2ghz_success).visibility).isEqualTo(View.VISIBLE)
 
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_success).visibility)
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_fails).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_success).visibility).isEqualTo(View.VISIBLE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_fails).visibility).isEqualTo(View.GONE)
 
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_success).visibility)
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_fails).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_success).visibility).isEqualTo(View.VISIBLE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_fails).visibility).isEqualTo(View.GONE)
     }
 
 }

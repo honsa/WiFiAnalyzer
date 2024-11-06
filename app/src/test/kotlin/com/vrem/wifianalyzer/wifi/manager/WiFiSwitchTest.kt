@@ -18,16 +18,10 @@
 package com.vrem.wifianalyzer.wifi.manager
 
 import android.net.wifi.WifiManager
-import com.nhaarman.mockitokotlin2.doNothing
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class WiFiSwitchTest {
     private val wifiManager: WifiManager = mock()
@@ -40,37 +34,37 @@ class WiFiSwitchTest {
 
     @Suppress("DEPRECATION")
     @Test
-    fun testOn() {
+    fun on() {
         // setup
         whenever(wifiManager.setWifiEnabled(true)).thenReturn(true)
         // execute
         val actual = fixture.on()
         // validate
-        assertTrue(actual)
+        assertThat(actual).isTrue()
         verify(wifiManager).isWifiEnabled = true
     }
 
     @Suppress("DEPRECATION")
     @Test
-    fun testOff() {
+    fun off() {
         // setup
         whenever(wifiManager.setWifiEnabled(false)).thenReturn(true)
         // execute
         val actual = fixture.off()
         // validate
-        assertTrue(actual)
+        assertThat(actual).isTrue()
         verify(wifiManager).isWifiEnabled = false
     }
 
     @Test
-    fun testOnWithAndroidQ() {
+    fun onWithAndroidQ() {
         // setup
         doReturn(true).whenever(fixture).minVersionQ()
         doNothing().whenever(fixture).startWiFiSettings()
         // execute
         val actual = fixture.on()
         // validate
-        assertTrue(actual)
+        assertThat(actual).isTrue()
         verify(fixture).startWiFiSettings()
         verify(fixture).minVersionQ()
     }

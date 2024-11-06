@@ -21,34 +21,34 @@ import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vrem.wifianalyzer.RobolectricUtil
 import com.vrem.wifianalyzer.wifi.band.WiFiBand
-import org.junit.Assert.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class TimeGraphAdapterTest {
 
     @Test
-    fun testGraphViewNotifiers() {
+    fun graphViewNotifiers() {
         // setup
         RobolectricUtil.INSTANCE.activity
         val fixture = TimeGraphAdapter()
         // execute
         val graphViewNotifiers = fixture.graphViewNotifiers()
         // validate
-        assertEquals(WiFiBand.entries.size, graphViewNotifiers.size)
+        assertThat(graphViewNotifiers).hasSize(WiFiBand.entries.size)
     }
 
     @Test
-    fun testGraphViews() {
+    fun graphViews() {
         // setup
         RobolectricUtil.INSTANCE.activity
         val fixture = TimeGraphAdapter()
         // execute
         val graphViews = fixture.graphViews()
         // validate
-        assertEquals(WiFiBand.entries.size, graphViews.size)
+        assertThat(graphViews).hasSize(WiFiBand.entries.size)
     }
 }

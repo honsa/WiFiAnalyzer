@@ -89,7 +89,7 @@ class Settings(private val repository: Repository) {
     fun wiFiBand(): WiFiBand = find(WiFiBand.entries, R.string.wifi_band_key, WiFiBand.GHZ2)
 
     fun wiFiOffOnExit(): Boolean =
-        if (minVersionQ()) {
+        if (buildMinVersionQ()) {
             false
         } else {
             repository.boolean(
@@ -138,8 +138,6 @@ class Settings(private val repository: Repository) {
     }
 
     private fun <T : Enum<T>> saveSet(key: Int, values: Set<T>): Unit = repository.saveStringSet(key, ordinals(values))
-
-    fun minVersionQ(): Boolean = buildMinVersionQ()
 
     companion object {
         private const val SCAN_SPEED_DEFAULT = 5

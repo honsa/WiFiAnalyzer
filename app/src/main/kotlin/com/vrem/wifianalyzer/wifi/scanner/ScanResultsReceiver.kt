@@ -17,6 +17,7 @@
  */
 package com.vrem.wifianalyzer.wifi.scanner
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -29,6 +30,7 @@ fun interface Callback { // Compliant, function interface used
     fun onSuccess()
 }
 
+@SuppressLint("UnspecifiedRegisterReceiverFlag")
 @OpenClass
 internal class ScanResultsReceiver(private val mainActivity: MainActivity, private val callback: Callback) :
     BroadcastReceiver() {
@@ -36,7 +38,8 @@ internal class ScanResultsReceiver(private val mainActivity: MainActivity, priva
 
     fun register() {
         if (!registered) {
-            mainActivity.registerReceiver(this, makeIntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+            val intentFilter = makeIntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+            mainActivity.registerReceiver(this, intentFilter)
             registered = true
         }
     }
@@ -57,4 +60,5 @@ internal class ScanResultsReceiver(private val mainActivity: MainActivity, priva
             callback.onSuccess()
         }
     }
+
 }

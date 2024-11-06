@@ -20,7 +20,7 @@ package com.vrem.wifianalyzer.wifi.model
 import com.vrem.util.EMPTY
 import com.vrem.wifianalyzer.wifi.band.WiFiBand
 import com.vrem.wifianalyzer.wifi.band.WiFiChannel
-import org.junit.Assert.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class ChannelRatingTest {
@@ -32,41 +32,41 @@ class ChannelRatingTest {
     private val wiFiDetail1 = WiFiDetail(
         WiFiIdentifier("SSID1", "20:cf:30:ce:1d:71"),
         WiFiSecurity.EMPTY,
-        WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50, true),
+        WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, -50),
         WiFiAdditional(String.EMPTY, wiFiConnection)
     )
     private val wiFiDetail2 = WiFiDetail(
         WiFiIdentifier("SSID2", "58:6d:8f:fa:ae:c0"),
         WiFiSecurity.EMPTY,
-        WiFiSignal(2442, 2442, WiFiWidth.MHZ_20, -70, true),
+        WiFiSignal(2442, 2442, WiFiWidth.MHZ_20, -70),
         WiFiAdditional.EMPTY
     )
     private val wiFiDetail3 = WiFiDetail(
         WiFiIdentifier("SSID3", "84:94:8c:9d:40:68"),
         WiFiSecurity.EMPTY,
-        WiFiSignal(2452, 2452, WiFiWidth.MHZ_20, -60, true),
+        WiFiSignal(2452, 2452, WiFiWidth.MHZ_20, -60),
         WiFiAdditional.EMPTY
     )
     private val wiFiDetail4 = WiFiDetail(
         WiFiIdentifier("SSID3", "64:A4:8c:90:10:12"),
         WiFiSecurity.EMPTY,
-        WiFiSignal(2452, 2452, WiFiWidth.MHZ_20, -80, true),
+        WiFiSignal(2452, 2452, WiFiWidth.MHZ_20, -80),
         WiFiAdditional.EMPTY
     )
 
     private val fixture = ChannelRating()
 
     @Test
-    fun testChannelRating() {
+    fun channelRating() {
         // setup
         val wiFiChannel: WiFiChannel = wiFiDetail1.wiFiSignal.centerWiFiChannel
         // execute & validate
-        assertEquals(0, fixture.count(wiFiChannel))
-        assertEquals(Strength.ZERO, fixture.strength(wiFiChannel))
+        assertThat(fixture.count(wiFiChannel)).isEqualTo(0)
+        assertThat(fixture.strength(wiFiChannel)).isEqualTo(Strength.ZERO)
     }
 
     @Test
-    fun testCount() {
+    fun count() {
         // setup
         fixture.wiFiDetails(listOf(wiFiDetail1, wiFiDetail2, wiFiDetail3, wiFiDetail4))
         // execute and validate
@@ -76,11 +76,11 @@ class ChannelRatingTest {
     }
 
     private fun validateCount(expected: Int, wiFiChannel: WiFiChannel) {
-        assertEquals(expected, fixture.count(wiFiChannel))
+        assertThat(fixture.count(wiFiChannel)).isEqualTo(expected)
     }
 
     @Test
-    fun testStrengthShouldReturnMaximum() {
+    fun strengthShouldReturnMaximum() {
         // setup
         val other: WiFiDetail = makeCopy(wiFiDetail3)
         fixture.wiFiDetails(listOf(other, wiFiDetail3))
@@ -88,11 +88,11 @@ class ChannelRatingTest {
         // execute
         val actual: Strength = fixture.strength(wiFiDetail3.wiFiSignal.centerWiFiChannel)
         // execute and validate
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testStrengthWithConnected() {
+    fun strengthWithConnected() {
         // setup
         val other: WiFiDetail = makeCopy(wiFiDetail1)
         fixture.wiFiDetails(listOf(other, wiFiDetail1))
@@ -100,7 +100,7 @@ class ChannelRatingTest {
         // execute
         val actual: Strength = fixture.strength(wiFiDetail1.wiFiSignal.centerWiFiChannel)
         // execute and validate
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     private fun makeCopy(wiFiDetail: WiFiDetail): WiFiDetail {
@@ -108,20 +108,20 @@ class ChannelRatingTest {
         return WiFiDetail(
             WiFiIdentifier("SSID2-OTHER", "BSSID-OTHER"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(wiFiSignal.primaryFrequency, wiFiSignal.centerFrequency, wiFiSignal.wiFiWidth, -80, true),
+            WiFiSignal(wiFiSignal.primaryFrequency, wiFiSignal.centerFrequency, wiFiSignal.wiFiWidth, -80),
             WiFiAdditional.EMPTY
         )
     }
 
     @Test
-    fun testBestChannelsSortedInOrderWithMinimumChannels() {
+    fun bestChannelsSortedInOrderWithMinimumChannels() {
         // setup
         val channels: List<WiFiChannel> = WiFiBand.GHZ2.wiFiChannels.wiFiChannels()
         fixture.wiFiDetails(listOf(wiFiDetail1, wiFiDetail2, wiFiDetail3, wiFiDetail4))
         // execute
         val actual: List<ChannelAPCount> = fixture.bestChannels(channels)
         // validate
-        assertEquals(7, actual.size)
+        assertThat(actual).hasSize(7)
         validateChannelAPCount(1, 0, actual[0])
         validateChannelAPCount(2, 0, actual[1])
         validateChannelAPCount(12, 0, actual[2])
@@ -132,23 +132,23 @@ class ChannelRatingTest {
     }
 
     private fun validateChannelAPCount(expectedChannel: Int, expectedCount: Int, channelAPCount: ChannelAPCount) {
-        assertEquals(expectedChannel, channelAPCount.wiFiChannel.channel)
-        assertEquals(expectedCount, channelAPCount.count)
+        assertThat(channelAPCount.wiFiChannel.channel).isEqualTo(expectedChannel)
+        assertThat(channelAPCount.count).isEqualTo(expectedCount)
     }
 
     @Test
-    fun testSetWiFiChannelsRemovesDuplicateAccessPoints() {
+    fun setWiFiChannelsRemovesDuplicateAccessPoints() {
         // setup
         val wiFiDetail = WiFiDetail(
             WiFiIdentifier("SSID2", "22:cf:30:ce:1d:72"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, wiFiDetail1.wiFiSignal.level - 5, true),
+            WiFiSignal(2432, 2432, WiFiWidth.MHZ_20, wiFiDetail1.wiFiSignal.level - 5),
             WiFiAdditional.EMPTY
         )
         // execute
         fixture.wiFiDetails(listOf(wiFiDetail1, wiFiDetail))
         // validate
-        assertEquals(1, fixture.wiFiDetails().size)
-        assertEquals(wiFiDetail1, fixture.wiFiDetails()[0])
+        assertThat(fixture.wiFiDetails()).hasSize(1)
+        assertThat(fixture.wiFiDetails()[0]).isEqualTo(wiFiDetail1)
     }
 }

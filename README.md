@@ -2,8 +2,7 @@
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="80">](https://play.google.com/store/apps/details?id=com.vrem.wifianalyzer)
 [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/repository/browse/?fdid=com.vrem.wifianalyzer)
-[<img src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-underground-app-us-white.png" alt="Get it at Amazon Store" height="70">
-](https://www.amazon.com/VREM-Software-Development-WiFiAnalyzer-open-source/dp/B06XZT7RYD)
+[<img src="https://raw.githubusercontent.com/andOTP/andOTP/master/assets/badges/get-it-on-github.png" alt="Get it on GitHub" height="80">](https://github.com/VREMSoftwareDevelopment/WiFiAnalyzer/releases/latest)
 
 This is the official repository of WiFi Analyzer.
 
@@ -46,14 +45,14 @@ This is the official repository of WiFi Analyzer.
 * Tap the title bar to switch between 2.4, 5 and 6 GHz WiFi band.
 * SSID with `***` or `*hidden*` means it is hidden.
 * Access Point security:
-    * <img src="images/ic_lock_black_18dp.png" alt="WPA2/WPA" height="20"> WPA3(SAE)/WPA2/WPA 
-    * <img src="images/ic_lock_outline_black_18dp.png" alt="WEP/WPS" height="20"> WEP/WPS
-    * <img src="images/ic_lock_open_black_18dp.png" alt="Disabled" height="20"> Disabled
+    * <img src="images/ic_lock_black_18dp.png" alt="WPA2/WPA" height="20">WPA3(SAE)/WPA2/WPA
+    * <img src="images/ic_lock_outline_black_18dp.png" alt="WEP/WPS" height="20">WEP/WPS
+    * <img src="images/ic_lock_open_black_18dp.png" alt="Disabled" height="20">Disabled
 * Wi-Fi Standard (Requires Android OS 11+):
-    * <img src="images/ic_wifi_legacy.png" alt="Wi-Fi 802.11a/b/g" height="20"> Wi-Fi 802.11a/b/g
-    * <img src="images/ic_wifi_4.png" alt="Wi-Fi 802.11n" height="20"> Wi-Fi 802.11n
-    * <img src="images/ic_wifi_5.png" alt="Wi-Fi 802.11ac" height="20"> Wi-Fi 802.11ac
-    * <img src="images/ic_wifi_6.png" alt="Wi-Fi 802.11ax" height="20"> Wi-Fi 802.11ax
+    * 4 - 802.11n
+    * 5 - 802.11ac
+    * 6 - 802.11ax
+    * 7 - 802.11be
 
 ## How-to
 
@@ -108,7 +107,7 @@ WiFi Analyzer is licensed under the GNU General Public License v3.0 (GPLv3).
 
 [![Workflow Status](https://github.com/VREMSoftwareDevelopment/WiFiAnalyzer/workflows/Android%20CI/badge.svg)](https://github.com/VREMSoftwareDevelopment/WiFiAnalyzer/actions?query=workflow%3A%22Android+CI%22)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/203eaa0583694bcca6554190513179ba)](https://app.codacy.com/gh/VREMSoftwareDevelopment/WiFiAnalyzer/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![codecov](https://codecov.io/gh/VREMSoftwareDevelopment/WiFiAnalyzer/branch/master/graph/badge.svg)](https://codecov.io/gh/VREMSoftwareDevelopment/WiFiAnalyzer)
+[![codecov](https://codecov.io/gh/VREMSoftwareDevelopment/WiFiAnalyzer/branch/main/graph/badge.svg)](https://codecov.io/gh/VREMSoftwareDevelopment/WiFiAnalyzer)
 
 [![Known Vulnerabilities](https://snyk.io/test/github/vremsoftwaredevelopment/wifianalyzer/badge.svg)](https://snyk.io/test/github/vremsoftwaredevelopment/wifianalyzer)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FVREMSoftwareDevelopment%2FWiFiAnalyzer.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FVREMSoftwareDevelopment%2FWiFiAnalyzer?ref=badge_shield)

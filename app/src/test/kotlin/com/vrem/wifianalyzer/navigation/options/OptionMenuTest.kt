@@ -21,14 +21,14 @@ import android.app.Activity
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.wifianalyzer.R
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 
 class OptionMenuTest {
     private val menu: Menu = mock()
@@ -46,19 +46,19 @@ class OptionMenuTest {
     }
 
     @Test
-    fun testCreate() {
+    fun create() {
         // setup
         whenever(activity.menuInflater).thenReturn(menuInflater)
         // execute
         fixture.create(activity, menu)
         // validate
-        assertEquals(menu, fixture.menu)
+        assertThat(fixture.menu).isEqualTo(menu)
         verify(activity).menuInflater
         verify(menuInflater).inflate(R.menu.optionmenu, menu)
     }
 
     @Test
-    fun testActions() {
+    fun actions() {
         // setup
         val itemId = -1
         whenever(menuItem.itemId).thenReturn(itemId)

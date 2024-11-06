@@ -19,17 +19,12 @@ package com.vrem.wifianalyzer.navigation.availability
 
 import android.view.Menu
 import android.view.MenuItem
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.wifianalyzer.MainActivity
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.navigation.options.OptionMenu
 import org.junit.After
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class ScannerSwitchOffTest {
     private val mainActivity: MainActivity = mock()
@@ -46,7 +41,7 @@ class ScannerSwitchOffTest {
     }
 
     @Test
-    fun testNavigationOptionScannerSwitchOff() {
+    fun navigationOptionScannerSwitchOff() {
         // setup
         whenever(mainActivity.optionMenu).thenReturn(optionMenu)
         whenever(optionMenu.menu).thenReturn(menu)
@@ -61,7 +56,7 @@ class ScannerSwitchOffTest {
     }
 
     @Test
-    fun testNavigationOptionScannerSwitchOffWithNoMenuDoesNotSetVisibleFalse() {
+    fun navigationOptionScannerSwitchOffWithNoMenuDoesNotSetVisibleFalse() {
         // setup
         whenever(mainActivity.optionMenu).thenReturn(optionMenu)
         whenever(optionMenu.menu).thenReturn(null)

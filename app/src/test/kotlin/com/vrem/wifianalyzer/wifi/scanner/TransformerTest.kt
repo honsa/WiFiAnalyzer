@@ -18,39 +18,39 @@
 package com.vrem.wifianalyzer.wifi.scanner
 
 import android.net.wifi.ScanResult
+import android.net.wifi.ScanResult.InformationElement
 import android.net.wifi.WifiInfo
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
-import com.vrem.wifianalyzer.wifi.model.BSSID
-import com.vrem.wifianalyzer.wifi.model.SSID
-import com.vrem.wifianalyzer.wifi.model.WiFiConnection
-import com.vrem.wifianalyzer.wifi.model.WiFiDetail
-import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
-import com.vrem.wifianalyzer.wifi.model.WiFiSecurityTypeTest
-import com.vrem.wifianalyzer.wifi.model.WiFiStandard
-import com.vrem.wifianalyzer.wifi.model.WiFiWidth
+import android.os.Build
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vrem.wifianalyzer.wifi.model.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.*
+import org.robolectric.annotation.Config
+import java.nio.ByteBuffer
 
+@RunWith(AndroidJUnit4::class)
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class TransformerTest {
-    private val scanResult1 = withScanResult(SSID_1, BSSID_1, WiFiWidth.MHZ_160, WiFiStandard.AX, WiFiSecurityTypeTest.All)
-    private val scanResult2 = withScanResult(SSID_2, BSSID_2, WiFiWidth.MHZ_80, WiFiStandard.AC, WiFiSecurityTypeTest.WPA3)
-    private val scanResult3 = withScanResult(SSID_3, BSSID_3, WiFiWidth.MHZ_40, WiFiStandard.N, listOf())
-    private val cacheResults = listOf(
-        CacheResult(scanResult1, scanResult1.level),
-        CacheResult(scanResult2, scanResult2.level),
-        CacheResult(scanResult3, scanResult2.level)
+    private val informationElement1 = withInformationElement(RM_ENABLED_CAPABILITIES_IE, byteArrayOf(0x7F, 0, 0, 0, 0))
+    private val informationElement2 = withInformationElement(EXTENDED_CAPABILITIES_IE, byteArrayOf(0, 0, 0x7F))
+    private val informationElement3 = withInformationElement(MOBILE_DOMAIN_IE, byteArrayOf())
+    private val scanResult1 =
+        withScanResult(SSID_1, BSSID_1, WiFiWidth.MHZ_160, WiFiStandard.AX, WiFiSecurityTypeTest.All)
+    private val scanResult2 = withScanResult(
+        SSID_2, BSSID_2, WiFiWidth.MHZ_80, WiFiStandard.AC, WiFiSecurityTypeTest.WPA3, listOf(
+            informationElement1,
+            informationElement2,
+            informationElement3
+        )
     )
+    private val scanResult3 = withScanResult(SSID_3, BSSID_3, WiFiWidth.MHZ_40, WiFiStandard.N, listOf(), listOf())
+    private val cacheResults = withCacheResults()
     private val wifiInfo = withWiFiInfo()
     private val cache: Cache = mock()
-    private val fixture = spy(Transformer(cache))
+    private val fixture = Transformer(cache)
 
     @After
     fun tearDown() {
@@ -59,62 +59,67 @@ class TransformerTest {
     }
 
     @Test
-    fun testTransformWifiInfo() {
+    fun transformWifiInfo() {
         // setup
         val expected = WiFiConnection(WiFiIdentifier(SSID_1, BSSID_1), IP_ADDRESS, LINK_SPEED)
         doReturn(wifiInfo).whenever(cache).wifiInfo
         // execute
         val actual = fixture.transformWifiInfo()
         // validate
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
         verify(cache).wifiInfo
         verifyWiFiInfo()
     }
 
     @Test
-    fun testTransformWithNulls() {
+    fun transformWithNulls() {
         // setup
         doReturn(null).whenever(cache).wifiInfo
         // execute
         val actual = fixture.transformWifiInfo()
         // validate
-        assertEquals(WiFiConnection.EMPTY, actual)
+        assertThat(actual).isEqualTo(WiFiConnection.EMPTY)
         verify(cache).wifiInfo
     }
 
     @Test
-    fun testTransformWifiInfoNotConnected() {
+    fun transformWifiInfoNotConnected() {
         // setup
         doReturn(wifiInfo).whenever(cache).wifiInfo
         doReturn(-1).whenever(wifiInfo).networkId
         // execute
         val actual = fixture.transformWifiInfo()
         // validate
-        assertEquals(WiFiConnection.EMPTY, actual)
+        assertThat(actual).isEqualTo(WiFiConnection.EMPTY)
         verify(wifiInfo).networkId
         verify(cache).wifiInfo
     }
 
     @Test
-    fun testTransformScanResults() {
+    fun transformScanResults() {
         // setup
-        doReturn(true).whenever(fixture).minVersionR()
-        doReturn(true).whenever(fixture).minVersionT()
+        val fastRoaming = FastRoaming.entries.toList()
         doReturn(cacheResults).whenever(cache).scanResults()
         // execute
         val actual = fixture.transformCacheResults()
         // validate
-        assertEquals(cacheResults.size, actual.size)
+        assertThat(actual).hasSize(cacheResults.size)
         validateWiFiDetail(SSID_1, BSSID_1, WiFiWidth.MHZ_160, WiFiStandard.AX, actual[0], WiFiSecurityTypeTest.All)
-        validateWiFiDetail(SSID_2, BSSID_2, WiFiWidth.MHZ_80, WiFiStandard.AC, actual[1], WiFiSecurityTypeTest.WPA3)
+        validateWiFiDetail(
+            SSID_2,
+            BSSID_2,
+            WiFiWidth.MHZ_80,
+            WiFiStandard.AC,
+            actual[1],
+            WiFiSecurityTypeTest.WPA3,
+            fastRoaming
+        )
         validateWiFiDetail(SSID_3, BSSID_3, WiFiWidth.MHZ_40, WiFiStandard.N, actual[2], listOf())
-        verify(fixture, times(3)).minVersionR()
-        verify(fixture, times(3)).minVersionT()
         verify(cache).scanResults()
     }
 
     @Test
-    fun testWiFiData() {
+    fun wiFiData() {
         // setup
         val expectedWiFiConnection = WiFiConnection(WiFiIdentifier(SSID_1, BSSID_1), IP_ADDRESS, LINK_SPEED)
         doReturn(wifiInfo).whenever(cache).wifiInfo
@@ -122,55 +127,11 @@ class TransformerTest {
         // execute
         val actual = fixture.transformToWiFiData()
         // validate
-        assertEquals(expectedWiFiConnection, actual.wiFiConnection)
-        assertEquals(cacheResults.size, actual.wiFiDetails.size)
+        assertThat(actual.wiFiConnection).isEqualTo(expectedWiFiConnection)
+        assertThat(actual.wiFiDetails).hasSize(cacheResults.size)
         verifyWiFiInfo()
         verify(cache).wifiInfo
         verify(cache).scanResults()
-    }
-
-    @Test
-    fun testWiFiStandardMinVersionR() {
-        // setup
-        doReturn(true).whenever(fixture).minVersionR()
-        // execute
-        val actual = fixture.wiFiStandard(scanResult1)
-        // validate
-        assertEquals(WiFiStandard.AX.wiFiStandardId, actual)
-        verify(fixture).minVersionR()
-    }
-
-    @Test
-    fun testWiFiStandard() {
-        // setup
-        doReturn(false).whenever(fixture).minVersionR()
-        // execute
-        val actual = fixture.wiFiStandard(scanResult1)
-        // validate
-        assertEquals(WiFiStandard.UNKNOWN.wiFiStandardId, actual)
-        verify(fixture).minVersionR()
-    }
-
-    @Test
-    fun testSecurityTypesMinVersionT() {
-        // setup
-        doReturn(true).whenever(fixture).minVersionT()
-        // execute
-        val actual = fixture.securityTypes(scanResult1)
-        // validate
-        assertEquals(WiFiSecurityTypeTest.All, actual)
-        verify(fixture).minVersionT()
-    }
-
-    @Test
-    fun testSecurityTypes() {
-        // setup
-        doReturn(false).whenever(fixture).minVersionT()
-        // execute
-        val actual = fixture.securityTypes(scanResult1)
-        // validate
-        assertTrue(actual.isEmpty())
-        verify(fixture).minVersionT()
     }
 
     private fun withScanResult(
@@ -178,7 +139,8 @@ class TransformerTest {
         bssid: BSSID,
         wiFiWidth: WiFiWidth,
         wiFiStandard: WiFiStandard,
-        securityTypes: List<Int>?
+        securityTypes: List<Int>,
+        informationElements: List<InformationElement> = listOf()
     ): ScanResult {
         val scanResult: ScanResult = mock()
         whenSsid(scanResult, ssid)
@@ -195,9 +157,17 @@ class TransformerTest {
         scanResult.level = LEVEL
         scanResult.channelWidth = wiFiWidth.ordinal
         doReturn(wiFiStandard.wiFiStandardId).whenever(scanResult).wifiStandard
-        doReturn(securityTypes?.toIntArray()).whenever(scanResult).securityTypes
+        doReturn(securityTypes.toIntArray()).whenever(scanResult).securityTypes
+        doReturn(informationElements).whenever(scanResult).informationElements
         return scanResult
     }
+
+    private fun withInformationElement(id: Int, bytes: ByteArray): InformationElement =
+        mock<InformationElement>().apply {
+            doReturn(id).whenever(this).id
+            doReturn(0).whenever(this).idExt
+            doReturn(ByteBuffer.wrap(bytes).asReadOnlyBuffer()).whenever(this).bytes
+        }
 
     private fun withWiFiInfo(): WifiInfo {
         val wifiInfo: WifiInfo = mock()
@@ -218,20 +188,33 @@ class TransformerTest {
     }
 
     private fun validateWiFiDetail(
-        ssid: String, bssid: String, wiFiWidth: WiFiWidth, wiFiStandard: WiFiStandard, wiFiDetail: WiFiDetail, securityTypes: List<Int>
+        ssid: String,
+        bssid: String,
+        wiFiWidth: WiFiWidth,
+        wiFiStandard: WiFiStandard,
+        wiFiDetail: WiFiDetail,
+        securityTypes: List<Int>,
+        fastRoaming: List<FastRoaming> = listOf()
     ) {
         with(wiFiDetail) {
-            assertEquals(ssid, wiFiIdentifier.ssid)
-            assertEquals(bssid, wiFiIdentifier.bssid)
-            assertEquals(wiFiWidth, wiFiSignal.wiFiWidth)
-            assertEquals(wiFiStandard, wiFiSignal.wiFiStandard)
-            assertEquals(LEVEL, wiFiSignal.level)
-            assertEquals(FREQUENCY, wiFiSignal.primaryFrequency)
-            assertEquals(FREQUENCY + wiFiWidth.frequencyWidthHalf, wiFiSignal.centerFrequency)
-            assertEquals(WPA, wiFiSecurity.capabilities)
-            assertEquals(securityTypes, wiFiSecurity.securityTypes)
+            assertThat(wiFiIdentifier.ssid).isEqualTo(ssid)
+            assertThat(wiFiIdentifier.bssid).isEqualTo(bssid)
+            assertThat(wiFiSignal.wiFiWidth).isEqualTo(wiFiWidth)
+            assertThat(wiFiSignal.extra.wiFiStandard).isEqualTo(wiFiStandard)
+            assertThat(wiFiSignal.level).isEqualTo(LEVEL)
+            assertThat(wiFiSignal.primaryFrequency).isEqualTo(FREQUENCY)
+            assertThat(wiFiSignal.centerFrequency).isEqualTo(FREQUENCY + wiFiWidth.frequencyWidthHalf)
+            assertThat(wiFiSignal.extra.fastRoaming).isEqualTo(fastRoaming)
+            assertThat(wiFiSecurity.capabilities).isEqualTo(WPA)
+            assertThat(wiFiSecurity.securityTypes).isEqualTo(securityTypes)
         }
     }
+
+    private fun withCacheResults() = listOf(
+        CacheResult(scanResult1, scanResult1.level),
+        CacheResult(scanResult2, scanResult2.level),
+        CacheResult(scanResult3, scanResult2.level)
+    )
 
     companion object {
         private const val SSID_1 = "SSID_1-123"

@@ -17,15 +17,13 @@
  */
 package com.vrem.wifianalyzer.wifi.filter.adapter
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.vrem.wifianalyzer.settings.Settings
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 
 class SSIDAdapterTest {
     private val ssidValues: Set<String> = setOf("value1", "value2", "value3")
@@ -38,39 +36,38 @@ class SSIDAdapterTest {
     }
 
     @Test
-    fun testGetValues() {
-        // setup
+    fun getValues() {
         // execute
         val actual = fixture.selections
         // validate
-        assertTrue(actual.containsAll(ssidValues))
+        assertThat(actual).containsAll(ssidValues)
     }
 
     @Test
-    fun testIsActive() {
-        assertTrue(fixture.isActive())
+    fun isActive() {
+        assertThat(fixture.isActive()).isTrue()
     }
 
     @Test
-    fun testIsNotActiveWithEmptyValue() {
+    fun isNotActiveWithEmptyValue() {
         // execute
         fixture.selections = setOf()
         // validate
-        assertFalse(fixture.isActive())
-        assertTrue(fixture.selections.isEmpty())
+        assertThat(fixture.isActive()).isFalse()
+        assertThat(fixture.selections).isEmpty()
     }
 
     @Test
-    fun testIsNotActiveWithReset() {
+    fun isNotActiveWithReset() {
         // execute
         fixture.reset()
         // validate
-        assertFalse(fixture.isActive())
-        assertTrue(fixture.selections.isEmpty())
+        assertThat(fixture.isActive()).isFalse()
+        assertThat(fixture.selections).isEmpty()
     }
 
     @Test
-    fun testSave() {
+    fun save() {
         // execute
         fixture.save(settings)
         // execute
@@ -78,14 +75,14 @@ class SSIDAdapterTest {
     }
 
     @Test
-    fun testSetValues() {
+    fun setValues() {
         // setup
         val expected: Set<String> = setOf("ABC", "EDF", "123")
         val values: Set<String> = setOf("", "ABC", "", "EDF", "  ", "123", "")
         // execute
         fixture.selections = values
         // execute
-        assertEquals(expected, fixture.selections)
+        assertThat(fixture.selections).isEqualTo(expected)
     }
 
 }

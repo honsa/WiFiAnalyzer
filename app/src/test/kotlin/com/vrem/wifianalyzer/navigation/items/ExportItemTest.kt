@@ -24,7 +24,6 @@ import android.os.Build
 import android.view.MenuItem
 import android.view.View
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.*
 import com.vrem.wifianalyzer.MainActivity
 import com.vrem.wifianalyzer.MainContextHelper
 import com.vrem.wifianalyzer.export.Export
@@ -32,15 +31,15 @@ import com.vrem.wifianalyzer.navigation.NavigationMenu
 import com.vrem.wifianalyzer.wifi.model.WiFiConnection
 import com.vrem.wifianalyzer.wifi.model.WiFiData
 import com.vrem.wifianalyzer.wifi.model.WiFiDetail
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.*
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class ExportItemTest {
     private val export: Export = mock()
     private val mainActivity: MainActivity = mock()
@@ -65,7 +64,7 @@ class ExportItemTest {
     }
 
     @Test
-    fun testActivate() {
+    fun activate() {
         // setup
         val wiFiData: WiFiData = withWiFiData()
         doReturn(wiFiData).whenever(scanner).wiFiData()
@@ -84,15 +83,15 @@ class ExportItemTest {
     }
 
     @Test
-    fun testRegistered() {
+    fun registered() {
         // execute & validate
-        assertFalse(fixture.registered)
+        assertThat(fixture.registered).isFalse()
     }
 
     @Test
-    fun testVisibility() {
+    fun visibility() {
         // execute & validate
-        assertEquals(View.GONE, fixture.visibility)
+        assertThat(fixture.visibility).isEqualTo(View.GONE)
     }
 
     private fun withWiFiData(): WiFiData {

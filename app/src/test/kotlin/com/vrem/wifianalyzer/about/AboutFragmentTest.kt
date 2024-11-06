@@ -22,17 +22,17 @@ import android.os.Build
 import android.view.View
 import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.nhaarman.mockitokotlin2.*
 import com.vrem.util.packageInfo
 import com.vrem.util.readFile
 import com.vrem.wifianalyzer.MainContextHelper
 import com.vrem.wifianalyzer.R
 import com.vrem.wifianalyzer.RobolectricUtil
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.*
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowAlertDialog
@@ -40,7 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class AboutFragmentTest {
     @Suppress("unused")
     private val mainActivity = RobolectricUtil.INSTANCE.activity
@@ -70,89 +70,89 @@ class AboutFragmentTest {
     }
 
     @Test
-    fun testOnCreateView() {
-        assertNotNull(fixture.view)
+    fun onCreateView() {
+        assertThat(fixture.view).isNotNull()
     }
 
     @Test
-    fun testVersionNumber() {
+    fun versionNumber() {
         // setup
         val expected: String = version() + "SL" + " (" + Build.VERSION.RELEASE + "-" + Build.VERSION.SDK_INT + ")"
         // execute
         val actual = fixture.requireView().findViewById<TextView>(R.id.about_version_info)
         // validate
-        assertNotNull(actual)
-        assertEquals(expected, actual.text)
+        assertThat(actual).isNotNull()
+        assertThat(actual.text).isEqualTo(expected)
     }
 
     @Test
-    fun testPackageName() {
+    fun packageName() {
         // execute
         val actual = fixture.requireView().findViewById<TextView>(R.id.about_package_name)
         // validate
-        assertNotNull(actual)
-        assertEquals(fixture.requireActivity().packageName, actual.text)
+        assertThat(actual).isNotNull()
+        assertThat(actual.text).isEqualTo(fixture.requireActivity().packageName)
     }
 
     @Test
-    fun testApplicationName() {
+    fun applicationName() {
         // setup
         val expected = fixture.getString(R.string.app_full_name)
         // execute
         val actual = fixture.requireView().findViewById<TextView>(R.id.about_application_name)
         // validate
-        assertNotNull(actual)
-        assertEquals(expected, actual.text)
+        assertThat(actual).isNotNull()
+        assertThat(actual.text).isEqualTo(expected)
     }
 
     @Test
-    fun testCopyright() {
+    fun copyright() {
         // setup
         val expected = (fixture.getString(R.string.app_copyright) + SimpleDateFormat("yyyy").format(Date()))
         // execute
         val actual = fixture.requireView().findViewById<TextView>(R.id.about_copyright)
         // validate
-        assertNotNull(actual)
-        assertEquals(expected, actual.text)
+        assertThat(actual).isNotNull()
+        assertThat(actual.text).isEqualTo(expected)
     }
 
     @Test
-    fun testDevice() {
+    fun device() {
         // setup
         val expected = "robolectric - robolectric - robolectric"
         // execute
         val actual = fixture.requireView().findViewById<TextView>(R.id.about_device)
         // validate
-        assertNotNull(actual)
-        assertEquals(expected, actual.text)
+        assertThat(actual).isNotNull()
+        assertThat(actual.text).isEqualTo(expected)
     }
 
     @Test
-    fun testDeviceInformation() {
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_on).visibility)
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_off).visibility)
+    fun deviceInformation() {
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_on).visibility).isEqualTo(View.GONE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_throttling_off).visibility).isEqualTo(View.VISIBLE)
 
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_2ghz_success).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_2ghz_success).visibility).isEqualTo(View.VISIBLE)
 
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_success).visibility)
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_fails).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_success).visibility).isEqualTo(View.GONE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_5ghz_fails).visibility).isEqualTo(View.VISIBLE)
 
-        assertEquals(View.GONE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_success).visibility)
-        assertEquals(View.VISIBLE, fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_fails).visibility)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_success).visibility).isEqualTo(View.GONE)
+        assertThat(fixture.requireView().findViewById<TextView>(R.id.about_wifi_band_6ghz_fails).visibility).isEqualTo(View.VISIBLE)
     }
 
     @Test
-    fun testWriteReview() {
+    fun writeReview() {
         // setup
         val view = fixture.requireView().findViewById<View>(R.id.writeReview)
         // execute
         val actual = view.performClick()
         //
-        assertTrue(actual)
+        assertThat(actual).isTrue()
     }
 
     @Test
-    fun testAlertDialogClickListener() {
+    fun alertDialogClickListener() {
         validateAlertDialogClickListener(R.id.contributors, R.string.about_contributor_title, R.raw.contributors)
         validateAlertDialogClickListener(R.id.license, R.string.gpl, R.raw.gpl)
         validateAlertDialogClickListener(R.id.graphViewLicense, R.string.al, R.raw.al)
@@ -174,7 +174,7 @@ class AboutFragmentTest {
         // validate
         val alertDialog = ShadowAlertDialog.getLatestAlertDialog()
         val shadowAlertDialog = shadowOf(alertDialog)
-        assertEquals(expectedTitle, shadowAlertDialog.title.toString())
-        assertEquals(expectedMessage, shadowAlertDialog.message.toString())
+        assertThat(shadowAlertDialog.title.toString()).isEqualTo(expectedTitle)
+        assertThat(shadowAlertDialog.message.toString()).isEqualTo(expectedMessage)
     }
 }

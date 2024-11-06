@@ -23,16 +23,11 @@ import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.GridLabelRenderer
 import com.jjoe64.graphview.LabelFormatter
 import com.jjoe64.graphview.Viewport
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.wifianalyzer.settings.ThemeStyle
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class GraphViewBuilderTest {
     private val numHorizontalLabels = 5
@@ -50,7 +45,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGraphViewLayout() {
+    fun graphViewLayout() {
         // setup
         val fixture = GraphViewBuilder(numHorizontalLabels, MAX_Y_DEFAULT, ThemeStyle.DARK, true)
         val layoutParams = fixture.layoutParams
@@ -62,7 +57,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testViewPortInitialize() {
+    fun viewPortInitialize() {
         // setup
         val maximumY = 20
         // execute
@@ -76,7 +71,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererLabelFormat() {
+    fun gridLabelRendererLabelFormat() {
         // execute
         gridLabelRenderer.labelFormat(labelFormatter)
         // validate
@@ -84,7 +79,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererLabels() {
+    fun gridLabelRendererLabels() {
         // setup
         val textSize = 11.1f
         val expectedSize = textSize * TEXT_SIZE_ADJUSTMENT
@@ -106,7 +101,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererVerticalAxisTitle() {
+    fun gridLabelRendererVerticalAxisTitle() {
         // setup
         val verticalTitle = "verticalTitle"
         val textSize = 11.1f
@@ -121,7 +116,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererVerticalTitleEmpty() {
+    fun gridLabelRendererVerticalTitleEmpty() {
         // execute
         gridLabelRenderer.verticalTitle("")
         // validate
@@ -130,7 +125,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererHorizontalAxisTitle() {
+    fun gridLabelRendererHorizontalAxisTitle() {
         // setup
         val horizontalTitle = "horizontalTitle"
         val textSize = 11f
@@ -145,7 +140,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRendererHorizontalAxisTitleEmpty() {
+    fun gridLabelRendererHorizontalAxisTitleEmpty() {
         // execute
         gridLabelRenderer.horizontalTitle("")
         // validate
@@ -154,18 +149,18 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGetNumVerticalLabels() {
+    fun getNumVerticalLabels() {
         // setup
         val expected = 9
         val fixture = GraphViewBuilder(numHorizontalLabels, MAX_Y_DEFAULT, ThemeStyle.DARK, true)
         // execute
         val actual = fixture.numVerticalLabels
         // validate
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testGetMaximumYLimits() {
+    fun getMaximumYLimits() {
         validateMaximumY(1, MAX_Y_DEFAULT)
         validateMaximumY(0, 0)
         validateMaximumY(-50, -50)
@@ -174,11 +169,11 @@ class GraphViewBuilderTest {
 
     private fun validateMaximumY(maximumY: Int, expected: Int) {
         val fixture = GraphViewBuilder(numHorizontalLabels, maximumY, ThemeStyle.DARK, true)
-        assertEquals(expected, fixture.maximumPortY)
+        assertThat(fixture.maximumPortY).isEqualTo(expected)
     }
 
     @Test
-    fun testGridLabelRenderColorsDarkTheme() {
+    fun gridLabelRenderColorsDarkTheme() {
         // execute
         gridLabelRenderer.colors(ThemeStyle.DARK)
         // validate
@@ -190,7 +185,7 @@ class GraphViewBuilderTest {
     }
 
     @Test
-    fun testGridLabelRenderColorsLightTheme() {
+    fun gridLabelRenderColorsLightTheme() {
         // execute
         gridLabelRenderer.colors(ThemeStyle.LIGHT)
         // validate

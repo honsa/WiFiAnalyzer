@@ -17,30 +17,24 @@
  */
 package com.vrem.wifianalyzer.wifi.predicate
 
-import com.vrem.wifianalyzer.wifi.model.Strength
-import com.vrem.wifianalyzer.wifi.model.WiFiDetail
-import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
-import com.vrem.wifianalyzer.wifi.model.WiFiSecurity
-import com.vrem.wifianalyzer.wifi.model.WiFiSignal
-import com.vrem.wifianalyzer.wifi.model.WiFiWidth
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import com.vrem.wifianalyzer.wifi.model.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class StrengthPredicateTest {
     @Test
-    fun testStrengthPredicate() {
+    fun strengthPredicate() {
         // setup
         val wiFiDetail = makeWiFiDetail()
         // execute & validate
-        assertTrue(Strength.THREE.predicate()(wiFiDetail))
-        assertFalse(Strength.FOUR.predicate()(wiFiDetail))
+        assertThat(Strength.THREE.predicate()(wiFiDetail)).isTrue()
+        assertThat(Strength.FOUR.predicate()(wiFiDetail)).isFalse()
     }
 
     private fun makeWiFiDetail(): WiFiDetail =
         WiFiDetail(
             WiFiIdentifier("ssid", "bssid"),
             WiFiSecurity("wpa"),
-            WiFiSignal(2445, 2445, WiFiWidth.MHZ_20, -60, true)
+            WiFiSignal(2445, 2445, WiFiWidth.MHZ_20, -60)
         )
 }

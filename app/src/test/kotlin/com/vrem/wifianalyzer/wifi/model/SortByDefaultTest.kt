@@ -17,72 +17,72 @@
  */
 package com.vrem.wifianalyzer.wifi.model
 
-import org.junit.Assert.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class SortByDefaultTest {
     private val fixture = sortByDefault()
 
     @Test
-    fun testSortByDefault() {
+    fun sortByDefaultUsingSame() {
         // setup
         val wiFiDetail1 = WiFiDetail(
             WiFiIdentifier("SSID1", "BSSID1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55, true),
+            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55),
             WiFiAdditional.EMPTY
         )
         val wiFiDetail2 = WiFiDetail(
             WiFiIdentifier("SSID1", "BSSID1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2432, 2432, WiFiWidth.MHZ_40, -35, false),
+            WiFiSignal(2432, 2432, WiFiWidth.MHZ_40, -35),
             WiFiAdditional.EMPTY
         )
         // execute
-        val actual: Int = fixture.compare(wiFiDetail1, wiFiDetail2)
+        val actual = fixture.compare(wiFiDetail1, wiFiDetail2)
         // validate
-        assertEquals(0, actual)
+        assertThat(actual).isEqualTo(0)
     }
 
     @Test
-    fun testSortByDefaultWithDifferentSSID() {
+    fun sortByDefaultWithDifferentSSID() {
         // setup
         val wiFiDetail1 = WiFiDetail(
             WiFiIdentifier("ssid1", "BSSID1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55, true),
+            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55),
             WiFiAdditional.EMPTY
         )
         val wiFiDetail2 = WiFiDetail(
             WiFiIdentifier("SSID1", "BSSID1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55, true),
+            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55),
             WiFiAdditional.EMPTY
         )
         // execute
-        val actual: Int = fixture.compare(wiFiDetail1, wiFiDetail2)
+        val actual = fixture.compare(wiFiDetail1, wiFiDetail2)
         // validate
-        assertEquals(32, actual)
+        assertThat(actual).isEqualTo(32)
     }
 
     @Test
-    fun testSortByDefaultWithDifferentBSSID() {
+    fun sortByDefaultWithDifferentBSSID() {
         // setup
         val wiFiDetail1 = WiFiDetail(
             WiFiIdentifier("SSID1", "bssid1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55, true),
+            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55),
             WiFiAdditional.EMPTY
         )
         val wiFiDetail2 = WiFiDetail(
             WiFiIdentifier("SSID1", "BSSID1"),
             WiFiSecurity.EMPTY,
-            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55, true),
+            WiFiSignal(2462, 2462, WiFiWidth.MHZ_20, -55),
             WiFiAdditional.EMPTY
         )
         // execute
-        val actual: Int = fixture.compare(wiFiDetail1, wiFiDetail2)
+        val actual = fixture.compare(wiFiDetail1, wiFiDetail2)
         // validate
-        assertEquals(32, actual)
+        assertThat(actual).isEqualTo(32)
     }
 }

@@ -18,29 +18,27 @@
 package com.vrem.wifianalyzer.wifi.accesspoint
 
 import com.vrem.wifianalyzer.R
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class ConnectionViewTypeTest {
     @Test
-    fun testConnectionViewTypeCount() {
-        assertEquals(3, ConnectionViewType.entries.size)
+    fun connectionViewTypeCount() {
+        assertThat(ConnectionViewType.entries).hasSize(3)
     }
 
     @Test
-    fun testGetLayout() {
-        assertEquals(R.layout.access_point_view_complete, ConnectionViewType.COMPLETE.layout)
-        assertEquals(R.layout.access_point_view_compact, ConnectionViewType.COMPACT.layout)
-        assertEquals(R.layout.access_point_view_hide, ConnectionViewType.HIDE.layout)
+    fun getLayout() {
+        assertThat(ConnectionViewType.COMPLETE.layout).isEqualTo(R.layout.access_point_view_complete)
+        assertThat(ConnectionViewType.COMPACT.layout).isEqualTo(R.layout.access_point_view_compact)
+        assertThat(ConnectionViewType.HIDE.layout).isEqualTo(R.layout.access_point_view_hide)
     }
 
     @Test
-    fun testIsHide() {
-        assertFalse(ConnectionViewType.COMPLETE.hide)
-        assertFalse(ConnectionViewType.COMPACT.hide)
-        assertTrue(ConnectionViewType.HIDE.hide)
+    fun isHide() {
+        assertThat(ConnectionViewType.COMPLETE.hide).isFalse()
+        assertThat(ConnectionViewType.COMPACT.hide).isFalse()
+        assertThat(ConnectionViewType.HIDE.hide).isTrue()
     }
 
 }

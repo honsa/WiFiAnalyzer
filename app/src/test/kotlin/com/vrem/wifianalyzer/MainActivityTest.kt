@@ -23,22 +23,22 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.navigation.NavigationView
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.util.EMPTY
 import com.vrem.wifianalyzer.navigation.NavigationMenu
 import com.vrem.wifianalyzer.navigation.NavigationMenuController
 import com.vrem.wifianalyzer.navigation.options.OptionMenu
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+@Config(sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE])
 class MainActivityTest {
     private val fixture = Robolectric.buildActivity(MainActivity::class.java).create().resume().get()
 
@@ -48,12 +48,12 @@ class MainActivityTest {
     }
 
     @Test
-    fun testMainActivity() {
-        assertFalse(MainContext.INSTANCE.scannerService.running())
+    fun mainActivity() {
+        assertThat(MainContext.INSTANCE.scannerService.running()).isFalse()
     }
 
     @Test
-    fun testOnPauseWillPauseScanner() {
+    fun onPauseWillPauseScanner() {
         // setup
         val scannerService = MainContextHelper.INSTANCE.scannerService
         // execute
@@ -64,7 +64,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnResumeWithPermissionGrantedWillResumeScanner() {
+    fun onResumeWithPermissionGrantedWillResumeScanner() {
         // setup
         val permissionService = MainContextHelper.INSTANCE.permissionService
         val scannerService = MainContextHelper.INSTANCE.scannerService
@@ -80,7 +80,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnResumeWithPermissionNotGrantedWillPauseScanner() {
+    fun onResumeWithPermissionNotGrantedWillPauseScanner() {
         // setup
         val permissionService = MainContextHelper.INSTANCE.permissionService
         val scannerService = MainContextHelper.INSTANCE.scannerService
@@ -94,7 +94,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnStartWithPermissionGrantedWillResumeScanner() {
+    fun onStartWithPermissionGrantedWillResumeScanner() {
         // setup
         val permissionService = MainContextHelper.INSTANCE.permissionService
         val scannerService = MainContextHelper.INSTANCE.scannerService
@@ -107,7 +107,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnStartWithPermissionNotGrantedWillCheckPermission() {
+    fun onStartWithPermissionNotGrantedWillCheckPermission() {
         // setup
         val permissionService = MainContextHelper.INSTANCE.permissionService
         whenever(permissionService.permissionGranted()).thenReturn(false)
@@ -119,7 +119,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnCreateOptionsMenu() {
+    fun onCreateOptionsMenu() {
         // setup
         val menu: Menu = mock()
         val optionMenu: OptionMenu = mock()
@@ -127,12 +127,12 @@ class MainActivityTest {
         // execute
         val actual = fixture.onCreateOptionsMenu(menu)
         // validate
-        assertTrue(actual)
+        assertThat(actual).isTrue()
         verify(optionMenu).create(fixture, menu)
     }
 
     @Test
-    fun testOnOptionsItemSelected() {
+    fun onOptionsItemSelected() {
         // setup
         val menuItem: MenuItem = mock()
         val optionMenu: OptionMenu = mock()
@@ -140,12 +140,12 @@ class MainActivityTest {
         // execute
         val actual = fixture.onOptionsItemSelected(menuItem)
         // validate
-        assertTrue(actual)
+        assertThat(actual).isTrue()
         verify(optionMenu).select(menuItem)
     }
 
     @Test
-    fun testOnConfigurationChanged() {
+    fun onConfigurationChanged() {
         // setup
         val configuration = fixture.resources.configuration
         val drawerNavigation: DrawerNavigation = mock()
@@ -157,7 +157,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnPostCreate() {
+    fun onPostCreate() {
         // setup
         val drawerNavigation: DrawerNavigation = mock()
         fixture.drawerNavigation = drawerNavigation
@@ -168,7 +168,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnStop() {
+    fun onStop() {
         // setup
         val scannerService = MainContextHelper.INSTANCE.scannerService
         // execute
@@ -178,7 +178,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testUpdateShouldUpdateScanner() {
+    fun updateShouldUpdateScanner() {
         // setup
         val scannerService = MainContextHelper.INSTANCE.scannerService
         // execute
@@ -188,7 +188,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOnSharedPreferenceChangedShouldUpdateScanner() {
+    fun onSharedPreferenceChangedShouldUpdateScanner() {
         // setup
         val scannerService = MainContextHelper.INSTANCE.scannerService
         val sharedPreferences: SharedPreferences = mock()
@@ -199,15 +199,15 @@ class MainActivityTest {
     }
 
     @Test
-    fun testOptionMenu() {
+    fun optionMenu() {
         // execute
         val actual = fixture.optionMenu
         // validate
-        assertNotNull(actual)
+        assertThat(actual).isNotNull()
     }
 
     @Test
-    fun testGetCurrentMenuItem() {
+    fun getCurrentMenuItem() {
         // setup
         val menuItem: MenuItem = mock()
         val navigationMenuController: NavigationMenuController = mock()
@@ -216,12 +216,12 @@ class MainActivityTest {
         // execute
         val actual = fixture.currentMenuItem()
         // validate
-        assertEquals(menuItem, actual)
+        assertThat(actual).isEqualTo(menuItem)
         verify(navigationMenuController).currentMenuItem()
     }
 
     @Test
-    fun testGetCurrentNavigationMenu() {
+    fun getCurrentNavigationMenu() {
         // setup
         val navigationMenu = NavigationMenu.CHANNEL_GRAPH
         val navigationMenuController: NavigationMenuController = mock()
@@ -230,12 +230,12 @@ class MainActivityTest {
         // execute
         val actual = fixture.currentNavigationMenu()
         // validate
-        assertEquals(navigationMenu, actual)
+        assertThat(actual).isEqualTo(navigationMenu)
         verify(navigationMenuController).currentNavigationMenu()
     }
 
     @Test
-    fun testSetCurrentNavigationMenu() {
+    fun setCurrentNavigationMenu() {
         // setup
         val settings = MainContextHelper.INSTANCE.settings
         val navigationMenu = NavigationMenu.CHANNEL_GRAPH
@@ -249,7 +249,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun testGetNavigationView() {
+    fun getNavigationView() {
         // setup
         val navigationMenuController: NavigationMenuController = mock()
         val navigationView: NavigationView = mock()
@@ -258,7 +258,7 @@ class MainActivityTest {
         // execute
         val actual = fixture.navigationView()
         // validate
-        assertEquals(navigationView, actual)
+        assertThat(actual).isEqualTo(navigationView)
         verify(navigationMenuController).navigationView
     }
 }

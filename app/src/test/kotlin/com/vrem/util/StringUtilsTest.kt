@@ -17,54 +17,54 @@
  */
 package com.vrem.util
 
-import org.junit.Assert.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import java.util.Locale
 
 class StringUtilsTest {
 
     @Test
-    fun testSpecialTrim() {
+    fun specialTrim() {
         // setup
         val expected = "ABS ADF"
         val value = "    ABS    ADF    "
         // execute
         val actual: String = value.specialTrim()
         // verify
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testToCapitalize() {
+    fun toCapitalize() {
         // setup
         val expected = "Value"
         val value = "value"
         // execute
         val actual: String = value.toCapitalize(Locale.US)
         // verify
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testNullToEmptyWhenNull() {
+    fun nullToEmptyWhenNull() {
         // setup
         val expected = String.EMPTY
         val value = null
         // execute
         val actual: String = String.nullToEmpty(value)
         // verify
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    fun testNullToEmpty() {
+    fun nullToEmpty() {
         // setup
         val expected = "value"
         val value = "value"
         // execute
         val actual: String = String.nullToEmpty(value)
         // verify
-        assertEquals(expected, actual)
+        assertThat(actual).isEqualTo(expected)
     }
 
 

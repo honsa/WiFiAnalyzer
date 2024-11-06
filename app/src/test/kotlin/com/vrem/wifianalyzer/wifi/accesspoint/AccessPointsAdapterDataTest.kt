@@ -18,26 +18,13 @@
 package com.vrem.wifianalyzer.wifi.accesspoint
 
 import android.widget.ExpandableListView
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.wifianalyzer.MainContextHelper.INSTANCE
 import com.vrem.wifianalyzer.wifi.band.WiFiBand
-import com.vrem.wifianalyzer.wifi.model.GroupBy
-import com.vrem.wifianalyzer.wifi.model.Security
-import com.vrem.wifianalyzer.wifi.model.SortBy
-import com.vrem.wifianalyzer.wifi.model.Strength
-import com.vrem.wifianalyzer.wifi.model.WiFiData
-import com.vrem.wifianalyzer.wifi.model.WiFiDetail
-import com.vrem.wifianalyzer.wifi.model.WiFiIdentifier
-import com.vrem.wifianalyzer.wifi.model.WiFiSignal
-import com.vrem.wifianalyzer.wifi.model.WiFiWidth
+import com.vrem.wifianalyzer.wifi.model.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class AccessPointsAdapterDataTest {
     private val wiFiData: WiFiData = mock()
@@ -57,17 +44,17 @@ class AccessPointsAdapterDataTest {
     }
 
     @Test
-    fun testBeforeUpdate() {
-        assertEquals(0, fixture.parentsCount())
-        assertEquals(0, fixture.childrenCount(0))
-        assertEquals(WiFiDetail.EMPTY, fixture.parent(0))
-        assertEquals(WiFiDetail.EMPTY, fixture.parent(-1))
-        assertEquals(WiFiDetail.EMPTY, fixture.child(0, 0))
-        assertEquals(WiFiDetail.EMPTY, fixture.child(0, -1))
+    fun beforeUpdate() {
+        assertThat(fixture.parentsCount()).isEqualTo(0)
+        assertThat(fixture.childrenCount(0)).isEqualTo(0)
+        assertThat(fixture.parent(0)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.parent(-1)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.child(0, 0)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.child(0, -1)).isEqualTo(WiFiDetail.EMPTY)
     }
 
     @Test
-    fun testAfterUpdateWithGroupByChannel() {
+    fun afterUpdateWithGroupByChannel() {
         // setup
         val wiFiDetails = withWiFiDetails()
         withSettings()
@@ -78,18 +65,18 @@ class AccessPointsAdapterDataTest {
         verify(wiFiData).wiFiDetails(any(), eq(SortBy.SSID), eq(GroupBy.CHANNEL))
         verify(accessPointsAdapterGroup).update(wiFiDetails, expandableListView)
         verifySettings()
-        assertEquals(wiFiDetails.size, fixture.parentsCount())
-        assertEquals(wiFiDetails[0], fixture.parent(0))
-        assertEquals(wiFiDetails[0].children.size, fixture.childrenCount(0))
-        assertEquals(wiFiDetails[0].children[0], fixture.child(0, 0))
-        assertEquals(WiFiDetail.EMPTY, fixture.parent(-1))
-        assertEquals(WiFiDetail.EMPTY, fixture.parent(wiFiDetails.size))
-        assertEquals(WiFiDetail.EMPTY, fixture.child(0, -1))
-        assertEquals(WiFiDetail.EMPTY, fixture.child(0, wiFiDetails[0].children.size))
+        assertThat(fixture.parentsCount()).isEqualTo(wiFiDetails.size)
+        assertThat(fixture.parent(0)).isEqualTo(wiFiDetails[0])
+        assertThat(fixture.childrenCount(0)).isEqualTo(wiFiDetails[0].children.size)
+        assertThat(fixture.child(0, 0)).isEqualTo(wiFiDetails[0].children[0])
+        assertThat(fixture.parent(-1)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.parent(wiFiDetails.size)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.child(0, -1)).isEqualTo(WiFiDetail.EMPTY)
+        assertThat(fixture.child(0, wiFiDetails[0].children.size)).isEqualTo(WiFiDetail.EMPTY)
     }
 
     @Test
-    fun testOnGroupCollapsed() {
+    fun onGroupCollapsed() {
         // setup
         val index = 11
         val wiFiDetails: List<WiFiDetail> = fixture.wiFiDetails
@@ -100,7 +87,7 @@ class AccessPointsAdapterDataTest {
     }
 
     @Test
-    fun testOnGroupExpanded() {
+    fun onGroupExpanded() {
         // setup
         val index = 22
         val wiFiDetails: List<WiFiDetail> = fixture.wiFiDetails
@@ -113,7 +100,7 @@ class AccessPointsAdapterDataTest {
     private fun withWiFiDetail(): WiFiDetail =
         WiFiDetail(
             WiFiIdentifier("SSID1", "BSSID1"),
-            wiFiSignal = WiFiSignal(2255, 2255, WiFiWidth.MHZ_20, -40, true),
+            wiFiSignal = WiFiSignal(2255, 2255, WiFiWidth.MHZ_20, -40),
             children = listOf(
                 WiFiDetail(WiFiIdentifier("SSID1-1", "BSSID1-1")),
                 WiFiDetail(WiFiIdentifier("SSID1-2", "BSSID1-2")),

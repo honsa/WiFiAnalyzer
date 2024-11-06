@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-apply plugin: "jacoco"
-
 jacoco {
-    toolVersion = "0.8.10"
+    toolVersion = "0.8.12"
 }
 
 def executionPath = 'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec'
@@ -36,7 +34,7 @@ def fileFilter = [
         '**/com/vrem/wifianalyzer/settings/SharedPreferences*'
 ]
 
-def classJavaDir = "$project.buildDir/intermediates/javac/debug/classes"
+def classJavaDir = "$project.buildDir/intermediates/javac/debug/compileDebugJavaWithJavac/classes"
 def classKotlinDir = "$project.buildDir/tmp/kotlin-classes/debug"
 def mainJavaSrc = "$project.projectDir/src/main/java"
 def mainKotlinSrc = "$project.projectDir/src/main/kotlin"
@@ -80,7 +78,7 @@ task jacocoTestCoverageVerification(type: JacocoCoverageVerification, dependsOn:
             }
             limit {
                 counter = 'LINE'
-                minimum = 0.97
+                minimum = 0.98
             }
             limit {
                 counter = 'METHOD'

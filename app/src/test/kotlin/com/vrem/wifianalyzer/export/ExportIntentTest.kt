@@ -18,15 +18,10 @@
 package com.vrem.wifianalyzer.export
 
 import android.content.Intent
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.*
 
 class ExportIntentTest {
     private val intentSend: Intent = mock()
@@ -41,7 +36,7 @@ class ExportIntentTest {
     }
 
     @Test
-    fun testIntent() {
+    fun intent() {
         // setup
         val title = "title"
         val data = "data"
@@ -50,7 +45,7 @@ class ExportIntentTest {
         // execute
         val actual = fixture.intent(title, data)
         // validate
-        assertEquals(intentChooser, actual)
+        assertThat(actual).isEqualTo(intentChooser)
 
         verify(intentSend).flags = Intent.FLAG_ACTIVITY_NEW_TASK
         verify(intentSend).type = "text/plain"

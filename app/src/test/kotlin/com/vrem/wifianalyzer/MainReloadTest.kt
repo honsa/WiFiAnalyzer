@@ -17,18 +17,16 @@
  */
 package com.vrem.wifianalyzer
 
-import com.nhaarman.mockitokotlin2.atLeastOnce
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import com.vrem.wifianalyzer.settings.ThemeStyle
 import com.vrem.wifianalyzer.wifi.accesspoint.ConnectionViewType
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.whenever
 import java.util.Locale
 
 class MainReloadTest {
@@ -53,66 +51,66 @@ class MainReloadTest {
     }
 
     @Test
-    fun testShouldNotReloadWithNoThemeChanges() {
+    fun shouldNotReloadWithNoThemeChanges() {
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertFalse(actual)
-        assertEquals(ThemeStyle.DARK, fixture.themeStyle)
+        assertThat(actual).isFalse()
+        assertThat(fixture.themeStyle).isEqualTo(ThemeStyle.DARK)
     }
 
     @Test
-    fun testShouldReloadWithThemeChange() {
+    fun shouldReloadWithThemeChange() {
         // setup
         val expected = ThemeStyle.LIGHT
         whenever(settings.themeStyle()).thenReturn(expected)
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertTrue(actual)
-        assertEquals(expected, fixture.themeStyle)
+        assertThat(actual).isTrue()
+        assertThat(fixture.themeStyle).isEqualTo(expected)
     }
 
     @Test
-    fun testShouldNotReloadWithNoConnectionViewTypeChanges() {
+    fun shouldNotReloadWithNoConnectionViewTypeChanges() {
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertFalse(actual)
-        assertEquals(ConnectionViewType.COMPLETE, fixture.connectionViewType)
+        assertThat(actual).isFalse()
+        assertThat(fixture.connectionViewType).isEqualTo(ConnectionViewType.COMPLETE)
     }
 
     @Test
-    fun testShouldReloadWithConnectionViewTypeChange() {
+    fun shouldReloadWithConnectionViewTypeChange() {
         // setup
         val expected = ConnectionViewType.COMPACT
         whenever(settings.connectionViewType()).thenReturn(expected)
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertTrue(actual)
-        assertEquals(expected, fixture.connectionViewType)
+        assertThat(actual).isTrue()
+        assertThat(fixture.connectionViewType).isEqualTo(expected)
     }
 
     @Test
-    fun testShouldNotReloadWithNoLanguageLocaleChanges() {
+    fun shouldNotReloadWithNoLanguageLocaleChanges() {
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertFalse(actual)
-        assertEquals(Locale.UK, fixture.languageLocale)
+        assertThat(actual).isFalse()
+        assertThat(fixture.languageLocale).isEqualTo(Locale.UK)
     }
 
     @Test
-    fun testShouldReloadWithLanguageLocaleChange() {
+    fun shouldReloadWithLanguageLocaleChange() {
         // setup
         val expected = Locale.US
         whenever(settings.languageLocale()).thenReturn(expected)
         // execute
         val actual = fixture.shouldReload(settings)
         // validate
-        assertTrue(actual)
-        assertEquals(expected, fixture.languageLocale)
+        assertThat(actual).isTrue()
+        assertThat(fixture.languageLocale).isEqualTo(expected)
     }
 
 }
